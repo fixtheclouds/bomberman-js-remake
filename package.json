@@ -1,0 +1,25 @@
+{
+  "name": "bomberman-js-remake",
+  "version": "1.0.0",
+  "description": "Remake of NES Bomberman (1983) using JavaSript & HTML5 Canvas",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint src",
+    "test": "./node_modules/.bin/mocha --reporter spec"
+  },
+  "keywords": [
+    "nes",
+    "bomberman"
+  ],
+  "author": "Egor Romanov <unsaidxpl@gmail.com>",
+  "devDependencies": {
+    "eslint": "^3.18.0",
+    "mocha": "^3.2.0",
+    "node-sass": "^4.5.1",
+    "sass-loader": "^6.0.3",
+    "webpack": "^2.3.1"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4"
+  }
+}

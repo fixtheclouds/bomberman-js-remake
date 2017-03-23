@@ -4,6 +4,7 @@
   "description": "Remake of NES Bomberman (1983) using JavaSript & HTML5 Canvas",
   "main": "index.js",
   "scripts": {
+    "build": "./node_modules/.bin/webpack",
     "lint": "eslint src",
     "test": "./node_modules/.bin/mocha --reporter spec"
   },

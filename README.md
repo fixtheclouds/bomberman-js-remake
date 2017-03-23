@@ -14,3 +14,7 @@ Single player Javascript/HTML5 remake of Bomberman game for NES console (1983)
 Navigate to cloned repo's directory and run:
 
 `npm install`
+
+To run Webpack
+
+`npm run build`

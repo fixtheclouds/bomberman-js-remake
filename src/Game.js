@@ -1,17 +1,34 @@
+import TitleScreen from './TitleScreen';
+import ImageLoader from './ImageLoader';
+
+let loader = new ImageLoader();
+
 export default class Game {
 
-    constructor(canvas) {
-        this.canvas = canvas;
-        this.context = this.canvas.getContext('2d');
-    }
+  constructor(canvas) {
+    this.canvas = canvas;
+    this.ctx = this.canvas.getContext('2d');
+    this._scene = new TitleScreen(this);
+  }
 
-    draw() {
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.player.draw(this.context);
-    }
+  set scene(value) {
+    this.scene = value;
+  }
 
-    update() {
-        // TODO implement        
-    }
+  get scene() {
+    return this.scene;
+  }
+
+  load() {
+    return loader.load('sprite.png');
+  }
+
+  draw() {
+    this._scene.draw();
+  }
+
+  update() {
+    this._scene.update();
+  }
 
 }

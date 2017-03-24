@@ -3,8 +3,8 @@ require('../assets/sass/main.sass');
 import Game from './Game';
 
 let canvas = document.getElementById('canvas');
-canvas.width = 400;
-canvas.height = 300;
+canvas.width = 512;
+canvas.height = 480;
 
 let game = new Game(canvas);
 
@@ -14,4 +14,6 @@ let mainloop = () => {
   requestAnimationFrame(mainloop);
 };
 
-requestAnimationFrame(mainloop);
+game.load().then(() =>
+  requestAnimationFrame(mainloop)
+);

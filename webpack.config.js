@@ -1,4 +1,5 @@
-var webpack = require('webpack');
+const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -14,17 +15,19 @@ module.exports = {
       name: 'vendor',
       filename: 'vendor.bundle.js'
     }),
+    new ExtractTextPlugin('styles.css')
   ],
   module: {
     rules: [{
-      test: /\.scss$/,
-      use: [{
-        loader: 'style-loader'
-      }, {
-        loader: 'css-loader'
-      }, {
-        loader: 'sass-loader'
-      }]
+      test: /\.sass$/,
+      use: ExtractTextPlugin.extract({
+        fallback: 'style-loader',
+        use: ['css-loader', 'sass-loader']
+      })
+    },
+    {
+      test: /\.ttf$/,
+      loader: 'file-loader?name=fonts/[name].[ext]'
     }]
   },
   watch: true

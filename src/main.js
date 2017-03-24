@@ -1,3 +1,5 @@
+require('../assets/sass/main.sass');
+
 import Game from './Game';
 
 let canvas = document.getElementById('canvas');

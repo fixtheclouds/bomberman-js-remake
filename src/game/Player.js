@@ -1,20 +1,15 @@
-import AnimatedSprite from './AnimatedSprite';
+import AnimatedSprite from '../AnimatedSprite';
 
 const LIVES_COUNT = 3;
-
-let movingUpSprite = new AnimatedSprite('sprite.png', 2, 3, 12, 16, [1, 2], 2);
-let movingDownSprite = new AnimatedSprite('sprite.png', 2, 21, 12, 16, [1, 2], 2);
-let movingLeftSprite = new AnimatedSprite('sprite.png', 44, 21, 12, 16, [1, 2], 2);
-let movingRightSprite = new AnimatedSprite('sprite.png', 43, 3, 12, 16, [1, 2], 2);
-let deathSprite = new AnimatedSprite('sprite.png', 83, 3, 12, 16, [0, 1, 2, 3, 4, 5], 2, false);
+const PLAYER_MOVING_SPEED = 1;
 
 export default class Player {
 
   constructor(game, x, y) {
     this.x = x;
     this.y = y;
-    this.width = 20;
-    this.height = 20;
+    this.width = 12;
+    this.height = 16;
     this.lives = LIVES_COUNT;
     this.speed = 0;
     this._frame = 0;
@@ -22,7 +17,15 @@ export default class Player {
     this._ctx = game.ctx;
     this.isAlive = true;
     this.isMoving = false;
-    this._sprite = movingUpSprite;
+
+    this.movingUpSprite = new AnimatedSprite('sprite.png', 2, 21, 12, 16, [1, 2], 2);
+    this.movingDownSprite = new AnimatedSprite('sprite.png', 2, 3, 12, 16, [1, 2], 2);
+    this.movingLeftSprite = new AnimatedSprite('sprite.png', 44, 21, 12, 16, [1, 2], 1);
+    this.movingRightSprite = new AnimatedSprite('sprite.png', 43, 3, 12, 16, [1, 2], 1);
+    this.deathSprite = new AnimatedSprite('sprite.png', 83, 3, 12, 16, [0, 1, 2, 3, 4, 5], 1, false);
+
+    this._sprite = this.movingUpSprite;
+
   }
 
   get centerX() {
@@ -35,59 +38,68 @@ export default class Player {
 
   kill() {
     this.isAlive = false;
-    this._sprite = deathSprite;
+    this._sprite = this.deathSprite;
   }
 
   bindKeyboard() {
     document.addEventListener('keydown', e => {
-      this.game.keys[e.keyCode] = true;
+      this._game.keys[e.keyCode] = true;
     });
 
     document.addEventListener('keyup', e => {
-      this.game.keys[e.keyCode] = false;
+      this._game.keys[e.keyCode] = false;
     });
   }
 
   keyPressCheck() {
-    if (this.game.keys[39]) {
+    this.stop();
+    if (this._game.keys[39]) {
       this.moveRight();
-    } else if (this.game.keys[37]) {
+    } else if (this._game.keys[37]) {
       this.moveLeft();
-    } else if (this.game.keys[38]) {
+    } else if (this._game.keys[38]) {
       this.moveUp();
-    } else if (this.game.keys[40]) {
+    } else if (this._game.keys[40]) {
       this.moveDown();
-    } else if (this.game.keys[18]) {
+    } else if (this._game.keys[18]) {
       this.plant();
-    } else if (this.game.keys[19]) {
+    } else if (this._game.keys[19]) {
       this.detonate();
     }
   }
 
+  stop() {
+    this.speed = 0;
+  }
+
   moveDown() {
-    this._sprite = movingDownSprite;
-    if (this.y > this.speed) {
+    this.speed = PLAYER_MOVING_SPEED;
+    this._sprite = this.movingDownSprite;
+    if (this.y < this._game.canvas.height - this.height) {
       this.y += this.speed;
     }
   }
 
   moveUp() {
-    this._sprite = movingUpSprite;
-    if (this.y > this.speed) {
+    this.speed = PLAYER_MOVING_SPEED;
+    this._sprite = this.movingUpSprite;
+    if (this.y > this.width) {
       this.y -= this.speed;
     }
   }
 
   moveRight() {
-    this._sprite = movingRightSprite;
-    if (this.x > this.speed) {
+    this.speed = PLAYER_MOVING_SPEED;
+    this._sprite = this.movingRightSprite;
+    if (this.x < this._game.canvas.width - this.width) {
       this.x += this.speed;
     }
   }
 
   moveLeft() {
-    this._sprite = movingLeftSprite;
-    if (this.x > this.speed) {
+    this.speed = PLAYER_MOVING_SPEED;
+    this._sprite = this.movingLeftSprite;
+    if (this.x > this.width) {
       this.x -= this.speed;
     }
   }
@@ -97,7 +109,9 @@ export default class Player {
   }
 
   update(frame) {
-    this._frame = this.speed * frame;
+    this._frame = frame;
+    this._sprite.speed = this.speed;
+    this._sprite.frame = this._frame;
   }
 
   plant() {

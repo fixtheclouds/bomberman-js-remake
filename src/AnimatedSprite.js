@@ -7,8 +7,9 @@ export default class AnimatedSprite extends Sprite {
     this.frame = 0; // default frame
     this.frames = frames; // animation sequence
     this.padding = padding || 2; // sprite horizontal padding
-    this.loop = loop || true; 
+    this.loop = loop || true;
     this.done = false;
+    this.speed = 0;
   }
 
   draw(ctx, posX, posY) {
@@ -17,15 +18,15 @@ export default class AnimatedSprite extends Sprite {
       let max = this.frames.length;
       let idx = Math.floor(this.frame);
       frame = this.frames[idx % max];
-
-      if (this.loop && idx >= max) {
+      if (!this.loop && idx >= max) {
         this.done = true;
         return;
       }
     }
 
-    posX += frame * this.width + this.padding;
-    super(ctx, posX, posY);
+    let x = this.x + frame * this.width + this.padding;
+
+    ctx.drawImage(this.img, x, this.y, this.width, this.height, posX*2, posY*2, this.width*2, this.height*2);
   }
 
 }

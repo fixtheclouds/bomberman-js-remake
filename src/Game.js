@@ -9,14 +9,19 @@ export default class Game {
     this.canvas = canvas;
     this.ctx = this.canvas.getContext('2d');
     this._scene = new TitleScreen(this);
+    this.keys = [];
+  }
+
+  init() {
+    this._scene.init();
   }
 
   set scene(value) {
-    this.scene = value;
+    this._scene = value;
   }
 
   get scene() {
-    return this.scene;
+    return this._scene;
   }
 
   load() {
@@ -27,8 +32,8 @@ export default class Game {
     this._scene.draw();
   }
 
-  update() {
-    this._scene.update();
+  update(frame) {
+    this._scene.update(frame);
   }
 
 }

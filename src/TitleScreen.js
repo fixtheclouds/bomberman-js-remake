@@ -7,11 +7,10 @@ export default class TitleScreen extends Scene{
 
   constructor(game) {
     super(game);
-    this.soundHandler = null;
   }
 
   init() {
-    this.soundHandler = this._soundManager.play('title-screen', true);
+    this._game.soundManager.start('title-screen', true);
     this._bindKeyboard();
   }
 
@@ -26,7 +25,9 @@ export default class TitleScreen extends Scene{
     let self = this;
     document.addEventListener('keydown', (e) => {
       if (e.keyCode === 13) {
-        self._game.scene = new GameScreen(self._game);
+        let scene = new GameScreen(self._game)
+        scene.init();
+        self._game.scene =  scene;
       }
     });
   }

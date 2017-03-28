@@ -1,5 +1,6 @@
 import TitleScreen from './TitleScreen';
 import ImageLoader from './ImageLoader';
+import SoundManager from './SoundManager';
 
 let loader = new ImageLoader();
 
@@ -10,6 +11,7 @@ export default class Game {
     this.ctx = this.canvas.getContext('2d');
     this._scene = new TitleScreen(this);
     this.keys = [];
+    this.soundManager = new SoundManager();
   }
 
   init() {

@@ -1,7 +1,6 @@
 import AnimatedSprite from '../AnimatedSprite';
 
 const LIVES_COUNT = 3;
-const PLAYER_MOVING_SPEED = 1;
 
 export default class Player {
 
@@ -11,18 +10,19 @@ export default class Player {
     this.width = 12;
     this.height = 16;
     this.lives = LIVES_COUNT;
-    this.speed = 0;
+    this.speed = 1;
+    this.currentSpeed = 0;
     this._frame = 0;
     this._game = game;
     this._ctx = game.ctx;
     this.isAlive = true;
     this.isMoving = false;
 
-    this.movingUpSprite = new AnimatedSprite('sprite.png', 2, 21, 12, 16, [1, 2], 2);
-    this.movingDownSprite = new AnimatedSprite('sprite.png', 2, 3, 12, 16, [1, 2], 2);
-    this.movingLeftSprite = new AnimatedSprite('sprite.png', 44, 21, 12, 16, [1, 2], 1);
-    this.movingRightSprite = new AnimatedSprite('sprite.png', 43, 3, 12, 16, [1, 2], 1);
-    this.deathSprite = new AnimatedSprite('sprite.png', 83, 3, 12, 16, [0, 1, 2, 3, 4, 5], 1, false);
+    this.movingUpSprite = new AnimatedSprite('sprite.png', 2, 21, 12, 16, [0, 1, 2], 2);
+    this.movingDownSprite = new AnimatedSprite('sprite.png', 2, 3, 12, 16, [0, 1, 2], 2);
+    this.movingLeftSprite = new AnimatedSprite('sprite.png', 43, 21, 12, 16, [0, 1, 2], 2);
+    this.movingRightSprite = new AnimatedSprite('sprite.png', 43, 3, 12, 16, [0, 1, 2], 2);
+    this.deathSprite = new AnimatedSprite('sprite.png', 83, 3, 12, 16, [0, 1, 2, 3, 4, 5], 2, false);
 
     this._sprite = this.movingUpSprite;
 
@@ -69,38 +69,38 @@ export default class Player {
   }
 
   stop() {
-    this.speed = 0;
+    this.currentSpeed = 0;
   }
 
   moveDown() {
-    this.speed = PLAYER_MOVING_SPEED;
+    this.currentSpeed = this.speed;
     this._sprite = this.movingDownSprite;
     if (this.y < this._game.canvas.height - this.height) {
-      this.y += this.speed;
+      this.y += this.currentSpeed;
     }
   }
 
   moveUp() {
-    this.speed = PLAYER_MOVING_SPEED;
+    this.currentSpeed = this.speed;
     this._sprite = this.movingUpSprite;
     if (this.y > this.width) {
-      this.y -= this.speed;
+      this.y -= this.currentSpeed;
     }
   }
 
   moveRight() {
-    this.speed = PLAYER_MOVING_SPEED;
+    this.currentSpeed = this.speed;
     this._sprite = this.movingRightSprite;
     if (this.x < this._game.canvas.width - this.width) {
-      this.x += this.speed;
+      this.x += this.currentSpeed;
     }
   }
 
   moveLeft() {
-    this.speed = PLAYER_MOVING_SPEED;
+    this.currentSpeed = this.speed;
     this._sprite = this.movingLeftSprite;
     if (this.x > this.width) {
-      this.x -= this.speed;
+      this.x -= this.currentSpeed;
     }
   }
 
@@ -110,7 +110,7 @@ export default class Player {
 
   update(frame) {
     this._frame = frame;
-    this._sprite.speed = this.speed;
+    this._sprite.speed = this.currentSpeed;
     this._sprite.frame = this._frame;
   }
 

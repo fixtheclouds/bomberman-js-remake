@@ -1,9 +1,24 @@
 export default class SoundManager {
 
-  static play(sound, looped) {
+  constructor() {
+    this.handler = null;
+  }
+
+  // Play audio once without initializing
+  static play(sound) {
     let audio = new Audio(`assets/sounds/${sound}.mp3`);
-    audio.loop = looped || false;
     audio.play();
+  }
+
+  start(sound, looped) {
+    this.handler = new Audio(`assets/sounds/${sound}.mp3`);
+    this.handler.loop = looped || false;
+    this.handler.play();
+  }
+
+  stop() {
+    this.handler.pause();
+    this.handler.currentTime = 0;
   }
 
 }

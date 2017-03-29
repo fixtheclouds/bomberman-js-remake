@@ -4,7 +4,7 @@ const LIVES_COUNT = 3;
 
 export default class Player {
 
-  constructor(game, x, y) {
+  constructor(game, scene, x, y) {
     this.x = x;
     this.y = y;
     this.width = 12;
@@ -14,10 +14,21 @@ export default class Player {
     this.currentSpeed = 0;
     this._frame = 0;
     this._game = game;
+    this.scene = scene;
+    this.detectCollisions = scene.collisionDetector.detect;
     this._ctx = game.ctx;
     this.isAlive = true;
     this.isMoving = false;
 
+    // Abilities
+    this.bombpass = false;
+    this.wallpass = false;
+    this.flamepass = false;
+    this.fireRange = 1;
+    this.maxBombs = 1;
+    this.hasDetonator = false;
+
+    // Sprites
     this.movingUpSprite = new AnimatedSprite('sprite.png', 2, 21, 12, 16, [0, 1, 2], 2);
     this.movingDownSprite = new AnimatedSprite('sprite.png', 2, 3, 12, 16, [0, 1, 2], 2);
     this.movingLeftSprite = new AnimatedSprite('sprite.png', 43, 21, 12, 16, [0, 1, 2], 2);
@@ -75,7 +86,7 @@ export default class Player {
   moveDown() {
     this.currentSpeed = this.speed;
     this._sprite = this.movingDownSprite;
-    if (this.y < this._game.canvas.height - this.height) {
+    if (!this.detectCollisions(this.x, this.y, 'down', this.bombpass, this.wallpass)) {
       this.y += this.currentSpeed;
     }
   }
@@ -83,7 +94,7 @@ export default class Player {
   moveUp() {
     this.currentSpeed = this.speed;
     this._sprite = this.movingUpSprite;
-    if (this.y > this.width) {
+    if (!this.detectCollisions(this.x, this.y, 'up', this.bombpass, this.wallpass)) {
       this.y -= this.currentSpeed;
     }
   }
@@ -91,7 +102,7 @@ export default class Player {
   moveRight() {
     this.currentSpeed = this.speed;
     this._sprite = this.movingRightSprite;
-    if (this.x < this._game.canvas.width - this.width) {
+    if (!this.detectCollisions(this.x, this.y, 'right', this.bombpass, this.wallpass)) {
       this.x += this.currentSpeed;
     }
   }
@@ -99,7 +110,7 @@ export default class Player {
   moveLeft() {
     this.currentSpeed = this.speed;
     this._sprite = this.movingLeftSprite;
-    if (this.x > this.width) {
+    if (!this.detectCollisions(this.x, this.y, 'left', this.bombpass, this.wallpass)) {
       this.x -= this.currentSpeed;
     }
   }
@@ -120,6 +131,10 @@ export default class Player {
 
   detonate() {
     // TODO implement
+  }
+
+  smoothTurn(x, y) {
+
   }
 
 }

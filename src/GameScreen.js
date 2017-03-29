@@ -1,45 +1,55 @@
 
 import Player from './game/Player';
 import Scene from './Scene';
-import Sprite from './Sprite';
+import Timer from './game/Timer';
 import TextString from './TextString';
 import HardBlock from './game/HardBlock';
+import SoftBlock from './game/SoftBlock';
+import CollisionDetector from './CollisionDetector';
+import stages from './stages';
 import * as constants from './constants';
 
-const BGCOLOR = '#1F8B00';
-const SOFT_BLOCKS_COUNT = 6; // TODO move to stages
+const BGCOLOR = '#5F8B00';
 
 export default class GameScreen extends Scene {
 
-  constructor(game) {
+  constructor(game, stage) {
     super(game);
     let self = this;
-    self.player = new Player(game, constants.UNIT_SIZE[0], constants.MAP_TOP_MARGIN + constants.UNIT_SIZE[1]);
+    self.stage = stages[stage];
+    self.collisionDetector = new CollisionDetector(this);
+    self.player = new Player(game, this, constants.UNIT_WIDTH, constants.MAP_TOP_MARGIN + constants.UNIT_HEIGHT);
     self.player.bindKeyboard();
-    self.blocksUsed = [];
-    _.times(constants.FIELD_SIZE[0], () => {
+    self.blocks = [];
+    _.times(self.stage.size[0], () => {
       let subArray = [];
-      _.times(constants.FIELD_SIZE[1], () => {
+      _.times(self.stage.size[1], () => {
         subArray.push(false);
       });
-      self.blocksUsed.push(subArray);
+      self.blocks.push(subArray);
     });
+    self.timer = new Timer(self.stage.time);
+    self.secondsLeft = null;
   }
 
   init() {
     this._game.soundManager.stop();
     this._game.soundManager.start('stage-theme', true);
+    this._buildBlocks();
+    this.timer.countdown();
   }
 
   draw() {
     this._drawBG();
-    this._drawHardBlocks();
+    this._drawHeader();
+    this._drawBlocks();
     this.player.draw();
   }
 
   update(frame) {
     this.player.update(frame);
     this.player.keyPressCheck();
+    this.secondsLeft = this.timer.seconds;
   }
 
   _drawBG() {
@@ -48,25 +58,36 @@ export default class GameScreen extends Scene {
   }
 
   // Build field layout
-  _drawHardBlocks() {
+  _buildBlocks() {
     let self = this;
-    let hardBlocks = [];
-    _.times(constants.FIELD_SIZE[0], (i) => {
-      _.times(constants.FIELD_SIZE[1], (j) => {
-        if (i === 0 || i === constants.FIELD_SIZE[0] - 1 || j === 0 || j === constants.FIELD_SIZE[1] - 1 || (i % 2 === 0 && j % 2 === 0)) {
-          hardBlocks.push(new HardBlock(i * constants.UNIT_SIZE[0], constants.MAP_TOP_MARGIN + j * constants.UNIT_SIZE[1]));
-          self.blocksUsed[i][j] = true;
+    _.times(self.stage.size[0], (i) => {
+      _.times(self.stage.size[1], (j) => {
+        if (i === 0 || i === self.stage.size[0] - 1 || j === 0 || j === self.stage.size[1] - 1 || (i % 2 === 0 && j % 2 === 0)) {
+          self.blocks[i][j] = new HardBlock(i, j);
+        } else if (Math.random() < self.stage.blockDensity && i !== 1 && j !== 1) {
+          self.blocks[i][j] = new SoftBlock(i, j);
         }
       });
     });
-    hardBlocks.forEach((e) => e.draw(this._ctx));
   }
 
-  _drawSoftBlocks() {
-    _.times(SOFT_BLOCKS_COUNT, () => {
-      // TODO implement
+  _drawHeader() {
+    this._ctx.fillStyle = '#BCBCBC';
+    this._ctx.fillRect(0, 0, this._game.canvas.width, constants.MAP_TOP_MARGIN * 2);
+
+    let timeText = new TextString(`time ${this.secondsLeft}`, 7, 23, '#ffffff', '#000000');
+    timeText.draw(this._ctx);
+    let lives = this.player.lives;
+    let leftText = new TextString(`left ${lives}`, 192, 23, '#ffffff', '#000000');
+    leftText.draw(this._ctx);
+  }
+
+  _drawBlocks() {
+    this.blocks.forEach((row) => {
+      row.forEach((block) => {
+        if (block) { block.draw(this._ctx); }
+      });
     });
   }
-
 
 }

@@ -1,5 +1,6 @@
 import Sprite from '../Sprite';
 import AnimatedSprite from '../AnimatedSprite';
+import * as constants from '../constants';
 
 export default class SoftBlock {
 
@@ -11,11 +12,12 @@ export default class SoftBlock {
   }
 
   draw(ctx) {
-    this.sprite.draw(ctx, this.x, this.y);
+    this.sprite.draw(ctx, this.x * constants.UNIT_WIDTH, constants.MAP_TOP_MARGIN + this.y * constants.UNIT_HEIGHT);
   }
 
+
   destroy(ctx) {
-    this.destroySprite.draw(ctx, this.x, this.y);
+    // TODO implement
   }
 
 }

@@ -23,13 +23,15 @@ export default class TitleScreen extends Scene{
 
   _bindKeyboard() {
     let self = this;
-    document.addEventListener('keydown', (e) => {
+    let keydown = (e) => {
       if (e.keyCode === 13) {
-        let scene = new GameScreen(self._game)
+        document.removeEventListener('keydown', keydown);
+        let scene = new GameScreen(self._game, 1);
         scene.init();
         self._game.scene =  scene;
       }
-    });
+    };
+    document.addEventListener('keydown', keydown);
   }
 
   update() {
@@ -47,7 +49,7 @@ export default class TitleScreen extends Scene{
   }
 
   _drawMenu() {
-    let text = new TextString('Start', 100, 170);
+    let text = new TextString('Start', 100, 170, '#ffffff', '#858585');
     text.draw(this._ctx);
   }
 

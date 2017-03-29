@@ -9,6 +9,22 @@ export default class Enemy {
     // TODO implement
   }
 
+  moveRandomly() {
+
+  }
+
+  moveTowardsPlayer() {
+
+  }
+
+  moveAwayFromBomb() {
+
+  }
+
+  availableDirections() {
+    
+  }
+
 }
 
 let types = {

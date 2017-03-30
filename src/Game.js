@@ -27,7 +27,7 @@ export default class Game {
   }
 
   load() {
-    return loader.load('sprite.png');
+    return loader.load('sprite.png', 'bomberman_v2.png', 'bomberman.gif');
   }
 
   draw() {

@@ -5,6 +5,7 @@ import Timer from './game/Timer';
 import TextString from './TextString';
 import HardBlock from './game/HardBlock';
 import SoftBlock from './game/SoftBlock';
+import Bomb from './game/Bomb';
 import CollisionDetector from './CollisionDetector';
 import stages from './stages';
 import * as constants from './constants';
@@ -22,11 +23,7 @@ export default class GameScreen extends Scene {
     self.player.bindKeyboard();
     self.blocks = [];
     _.times(self.stage.size[0], () => {
-      let subArray = [];
-      _.times(self.stage.size[1], () => {
-        subArray.push(false);
-      });
-      self.blocks.push(subArray);
+      self.blocks.push(new Array(self.stage.size[1]).fill(null));
     });
     self.timer = new Timer(self.stage.time);
     self.secondsLeft = null;
@@ -49,6 +46,7 @@ export default class GameScreen extends Scene {
   update(frame) {
     this.player.update(frame);
     this.player.keyPressCheck();
+    this.updateBombs(frame);
     this.secondsLeft = this.timer.seconds;
   }
 
@@ -86,6 +84,16 @@ export default class GameScreen extends Scene {
     this.blocks.forEach((row) => {
       row.forEach((block) => {
         if (block) { block.draw(this._ctx); }
+      });
+    });
+  }
+
+  updateBombs(frame) {
+    this.blocks.forEach((row) => {
+      row.forEach((block) => {
+        if (block instanceof Bomb) {
+          block.update(frame);
+        }
       });
     });
   }

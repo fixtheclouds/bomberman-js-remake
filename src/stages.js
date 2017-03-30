@@ -1,6 +1,6 @@
 let stages = {
   1: {
-    size: [16, 13],
+    size: [26, 13],
     enemies: {
       'Baloom': 4
     },

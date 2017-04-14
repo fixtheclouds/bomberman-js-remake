@@ -77,9 +77,11 @@ export default class Player {
       this.moveUp();
     } else if (this._game.keys[40]) {
       this.moveDown();
-    } else if (this._game.keys[17]) { // ctrl
+    }
+    if (this._game.keys[17]) { // ctrl
       this.plant();
-    } else if (this._game.keys[32]) { //space
+    }
+    if (this._game.keys[32]) { //space
       this.detonate();
     }
   }

@@ -9,14 +9,24 @@ export default class Explosion {
     this.col = col;
     this.row = row;
     this.range = range;
+    this.sprites = {
+      left: new AnimatedSprite(),
+      right: new AnimatedSprite(),
+      up: new AnimatedSprite(),
+      down: new AnimatedSprite(),
+      center: new AnimatedSprite(),
+      leftEdge: new AnimatedSprite(),
+      rightEdge: new AnimatedSprite(),
+      upEdge: new AnimatedSprite(),
+      downEdge: new AnimatedSprite()
+    };
   }
 
   fire() {
-    let self = this;
     ['up', 'right', 'down', 'left'].each((direction) => {
-      let x = self.col;
-      let y = self.row;
-      for (let i = 1; i++; i <= self.range) {
+      let x = this.col;
+      let y = this.row;
+      for (let i = 1; i++; i <= this.range) {
         if (direction === 'up') {
           y--;
         } else if (direction === 'down') {
@@ -26,21 +36,22 @@ export default class Explosion {
         } else if (direction === 'right') {
           x++;
         }
-        let edgeBlock = i == self.range;
-        if (self.scene.blocks[x][y] instanceof SoftBlock) {
-          self.scene.destroySoftBlock(x, y);
+        let edgeBlock = i == this.range;
+        if (this.scene.blocks[x][y] instanceof SoftBlock) {
+          this.scene.destroySoftBlock(x, y);
           break;
-        } else if (self.scene.blocks[x][y] instanceof HardBlock) {
+        } else if (this.scene.blocks[x][y] instanceof HardBlock) {
           break;
         } else {
-          self.drawBlock(x, y, edgeBlock ? direction + 'Edge' : direction);
+          this.drawBlock(x, y, edgeBlock ? direction + 'Edge' : direction);
+          // TODO publish explosion event with respective duration
         }
       }
     });
   }
 
   drawBlock(col, row, type) {
-    // TODO implement
+    this.sprites[type].draw();
   }
 
 }

@@ -10,24 +10,24 @@ export default class Enemy {
   }
 
   moveRandomly() {
-
+    // TODO implement
   }
 
   moveTowardsPlayer() {
-
+    // TODO implement
   }
 
   moveAwayFromBomb() {
-
+    // TODO implement
   }
 
   availableDirections() {
-    
+    // TODO implement
   }
 
 }
 
-let types = {
+const types = {
   'Baloom': {
     points: 100,
     wallpass: false,

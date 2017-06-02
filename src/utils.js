@@ -1,13 +1,13 @@
 import * as constants from './constants';
 
-export let utils = {
+export const utils = {
   getClosestCol(x) {
-    let width = constants.UNIT_WIDTH / 2;
+    const width = constants.UNIT_WIDTH / 2;
     return Math.floor((x + width) / constants.UNIT_WIDTH);
   },
 
   getClosestRow(y) {
-    let width = constants.UNIT_HEIGHT / 2;
+    const width = constants.UNIT_HEIGHT / 2;
     return Math.floor((y + width - constants.MAP_TOP_MARGIN) / constants.UNIT_HEIGHT);
   },
 

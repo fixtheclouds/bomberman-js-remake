@@ -1,6 +1,6 @@
 import Sprite from '../Sprite';
 
-let powerUps = {
+const powerUps = {
   'Flames': {
     sprite: new Sprite('sprite.png', 143, 271, 16, 16),
     action: function (player) {

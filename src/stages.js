@@ -1,4 +1,4 @@
-let stages = {
+const stages = {
   1: {
     size: [26, 13],
     enemies: {

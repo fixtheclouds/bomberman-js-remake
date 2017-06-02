@@ -22,13 +22,12 @@ export default class TitleScreen extends Scene{
   }
 
   _bindKeyboard() {
-    let self = this;
     let keydown = (e) => {
       if (e.keyCode === 13) {
         document.removeEventListener('keydown', keydown);
-        let scene = new GameScreen(self._game, 1);
+        let scene = new GameScreen(this._game, 1);
         scene.init();
-        self._game.scene =  scene;
+        this._game.scene =  scene;
       }
     };
     document.addEventListener('keydown', keydown);

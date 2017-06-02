@@ -16,17 +16,16 @@ export default class GameScreen extends Scene {
 
   constructor(game, stage) {
     super(game);
-    let self = this;
-    self.stage = stages[stage];
-    self.collisionDetector = new CollisionDetector(this);
-    self.player = new Player(game, this, constants.UNIT_WIDTH, constants.MAP_TOP_MARGIN + constants.UNIT_HEIGHT);
-    self.player.bindKeyboard();
-    self.blocks = [];
-    _.times(self.stage.size[0], () => {
-      self.blocks.push(new Array(self.stage.size[1]).fill(null));
+    this.stage = stages[stage];
+    this.collisionDetector = new CollisionDetector(this);
+    this.player = new Player(game, this, constants.UNIT_WIDTH, constants.MAP_TOP_MARGIN + constants.UNIT_HEIGHT);
+    this.player.bindKeyboard();
+    this.blocks = [];
+    _.times(this.stage.size[0], () => {
+      this.blocks.push(new Array(this.stage.size[1]).fill(null));
     });
-    self.timer = new Timer(self.stage.time);
-    self.secondsLeft = null;
+    this.timer = new Timer(this.stage.time);
+    this.secondsLeft = null;
   }
 
   init() {
@@ -57,13 +56,12 @@ export default class GameScreen extends Scene {
 
   // Build field layout
   _buildBlocks() {
-    let self = this;
-    _.times(self.stage.size[0], (i) => {
-      _.times(self.stage.size[1], (j) => {
-        if (i === 0 || i === self.stage.size[0] - 1 || j === 0 || j === self.stage.size[1] - 1 || (i % 2 === 0 && j % 2 === 0)) {
-          self.blocks[i][j] = new HardBlock(i, j);
-        } else if (Math.random() < self.stage.blockDensity && i !== 1 && j !== 1) {
-          self.blocks[i][j] = new SoftBlock(i, j);
+    _.times(this.stage.size[0], (i) => {
+      _.times(this.stage.size[1], (j) => {
+        if (i === 0 || i === this.stage.size[0] - 1 || j === 0 || j === this.stage.size[1] - 1 || (i % 2 === 0 && j % 2 === 0)) {
+          this.blocks[i][j] = new HardBlock(i, j);
+        } else if (Math.random() < this.stage.blockDensity && i !== 1 && j !== 1) {
+          this.blocks[i][j] = new SoftBlock(i, j);
         }
       });
     });

@@ -11,18 +11,17 @@ export default class ImageLoader {
   }
 
   load(...urls) {
-    let self = this;
     let promise = new Promise((resolve) => {
       urls.forEach((url) => {
-        if (self.cache[url]) {
-          return self.cache[url];
+        if (this.cache[url]) {
+          return this.cache[url];
         } else {
           let img = new Image();
           img.src = `./assets/images/${url}`;
-          self.cache[url] = false;
-          img.onload = function() {
-            self.cache[url] = img;
-            if (self.isReady()) {
+          this.cache[url] = false;
+          img.onload = () => {
+            this.cache[url] = img;
+            if (this.isReady()) {
               resolve();
             }
           };

@@ -11,14 +11,14 @@ export default class CollisionDetector {
   }
 
   detect(x, y, direction, bombpass, wallpass) {
-    let blocks = this.scene.blocks;
-    let col = getCol(x);
-    let row = getRow(y);
-    let nextCol = getNextCol(x) || col;
-    let nextRow = getNextRow(y) || row;
+    const blocks = this.scene.blocks;
+    const col = getCol(x);
+    const row = getRow(y);
+    const nextCol = getNextCol(x) || col;
+    const nextRow = getNextRow(y) || row;
 
-    let checkBlocking = function(x, y) {
-      let block = blocks[x][y];
+    const checkBlocking = function(x, y) {
+      const block = blocks[x][y];
       if (block instanceof HardBlock) {
         return true;
       } else if (!wallpass && block instanceof SoftBlock) {
@@ -43,18 +43,18 @@ export default class CollisionDetector {
 
 }
 
-let getCol = (x) => {
+const getCol = (x) => {
   return Math.floor(x / constants.UNIT_WIDTH);
 };
 
-let getRow = (y) => {
+const getRow = (y) => {
   return Math.floor((y - constants.MAP_TOP_MARGIN) / constants.UNIT_HEIGHT);
 };
 
-let getNextCol = (x) => {
+const getNextCol = (x) => {
   return Math.floor((x + constants.UNIT_WIDTH - 1) / constants.UNIT_WIDTH);
 };
 
-let getNextRow = (y) => {
+const getNextRow = (y) => {
   return Math.floor((y + constants.UNIT_HEIGHT - 1 - constants.MAP_TOP_MARGIN) / constants.UNIT_HEIGHT);
 };

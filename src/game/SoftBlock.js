@@ -1,14 +1,14 @@
-import Sprite from "../Sprite";
-import AnimatedSprite from "../AnimatedSprite";
-import * as constants from "../constants";
+import Sprite from '../Sprite';
+import AnimatedSprite from '../AnimatedSprite';
+import * as constants from '../constants';
 
 export default class SoftBlock {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.sprite = new Sprite("sprite.png", 17, 241, 16, 16);
+    this.sprite = new Sprite('sprite.png', 17, 241, 16, 16);
     this.destroySprite = new AnimatedSprite(
-      "sprite.png",
+      'sprite.png',
       35,
       241,
       16,

@@ -1,34 +1,46 @@
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+var path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   entry: {
-    app: './src/main.js',
-    vendor: 'lodash'
+    app: './src/app.js'
   },
   output: {
-    path: __dirname + '/dist',
-    filename: 'bundle.js'
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].js',
+    chunkFilename: '[name].js',
+    publicPath: '/dist/'
   },
+  mode: 'development',
   plugins: [
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      filename: 'vendor.bundle.js'
-    }),
-    new ExtractTextPlugin('styles.css')
+    new MiniCssExtractPlugin('styles.css'),
+    new webpack.ProvidePlugin({
+      _: 'lodash'
+    })
   ],
   module: {
-    rules: [{
-      test: /\.sass$/,
-      use: ExtractTextPlugin.extract({
-        fallback: 'style-loader',
-        use: ['css-loader', 'sass-loader']
-      })
-    },
-    {
-      test: /\.ttf$/,
-      loader: 'file-loader?name=fonts/[name].[ext]'
-    }]
+    rules: [
+      {
+        test: /\.sass$/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader']
+      },
+      {
+        test: /\.ttf$/,
+        loader: 'file-loader?name=fonts/[name].[ext]'
+      }
+    ]
   },
-  watch: true
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /node_modules/,
+          name: 'vendor',
+          chunks: 'initial',
+          enforce: true
+        }
+      }
+    }
+  }
 };

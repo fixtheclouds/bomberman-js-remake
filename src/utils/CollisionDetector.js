@@ -1,11 +1,10 @@
-import SoftBlock from './game/SoftBlock';
-import HardBlock from './game/HardBlock';
-import Bomb from './game/Bomb';
+import SoftBlock from '../game/SoftBlock';
+import HardBlock from '../game/HardBlock';
+import Bomb from '../game/Bomb';
 
-import * as constants from './constants';
+import * as constants from '../constants';
 
 export default class CollisionDetector {
-
   constructor(scene) {
     this.scene = scene;
   }
@@ -40,21 +39,23 @@ export default class CollisionDetector {
     }
     return false;
   }
-
 }
 
-const getCol = (x) => {
+const getCol = x => {
   return Math.floor(x / constants.UNIT_WIDTH);
 };
 
-const getRow = (y) => {
+const getRow = y => {
   return Math.floor((y - constants.MAP_TOP_MARGIN) / constants.UNIT_HEIGHT);
 };
 
-const getNextCol = (x) => {
+const getNextCol = x => {
   return Math.floor((x + constants.UNIT_WIDTH - 1) / constants.UNIT_WIDTH);
 };
 
-const getNextRow = (y) => {
-  return Math.floor((y + constants.UNIT_HEIGHT - 1 - constants.MAP_TOP_MARGIN) / constants.UNIT_HEIGHT);
+const getNextRow = y => {
+  return Math.floor(
+    (y + constants.UNIT_HEIGHT - 1 - constants.MAP_TOP_MARGIN) /
+      constants.UNIT_HEIGHT
+  );
 };

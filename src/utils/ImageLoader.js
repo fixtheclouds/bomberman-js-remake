@@ -1,7 +1,6 @@
 let instance = null;
 
 export default class ImageLoader {
-
   constructor() {
     if (!instance) {
       instance = this;
@@ -11,8 +10,8 @@ export default class ImageLoader {
   }
 
   load(...urls) {
-    let promise = new Promise((resolve) => {
-      urls.forEach((url) => {
+    let promise = new Promise(resolve => {
+      urls.forEach(url => {
         if (this.cache[url]) {
           return this.cache[url];
         } else {
@@ -44,5 +43,4 @@ export default class ImageLoader {
     }
     return ready;
   }
-
 }

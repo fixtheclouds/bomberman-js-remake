@@ -1,4 +1,4 @@
-import AnimatedSprite from '../AnimatedSprite';
+import AnimatedSprite from '../tools/AnimatedSprite';
 import * as constants from '../constants';
 
 export default class Bomb {

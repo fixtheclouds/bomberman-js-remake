@@ -1,10 +1,9 @@
-import Sprite from './Sprite';
-import TextString from './TextString';
+import Sprite from '../tools/Sprite';
+import TextString from '../tools/TextString';
 import Scene from './Scene';
 import GameScreen from './GameScreen';
 
-export default class TitleScreen extends Scene{
-
+export default class TitleScreen extends Scene {
   constructor(game) {
     super(game);
   }
@@ -15,19 +14,18 @@ export default class TitleScreen extends Scene{
   }
 
   draw() {
-
     this._drawBG();
     this._drawSplash();
     this._drawMenu();
   }
 
   _bindKeyboard() {
-    let keydown = (e) => {
+    let keydown = e => {
       if (e.keyCode === 13) {
         document.removeEventListener('keydown', keydown);
         let scene = new GameScreen(this._game, 1);
         scene.init();
-        this._game.scene =  scene;
+        this._game.scene = scene;
       }
     };
     document.addEventListener('keydown', keydown);
@@ -51,5 +49,4 @@ export default class TitleScreen extends Scene{
     let text = new TextString('Start', 100, 170, '#ffffff', '#858585');
     text.draw(this._ctx);
   }
-
 }

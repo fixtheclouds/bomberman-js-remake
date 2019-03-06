@@ -1,6 +1,6 @@
-import * as constants from './constants';
+import * as constants from '../constants';
 
-export const utils = {
+export const gridMethods = {
   getClosestCol(x) {
     const width = constants.UNIT_WIDTH / 2;
     return Math.floor((x + width) / constants.UNIT_WIDTH);
@@ -8,7 +8,9 @@ export const utils = {
 
   getClosestRow(y) {
     const width = constants.UNIT_HEIGHT / 2;
-    return Math.floor((y + width - constants.MAP_TOP_MARGIN) / constants.UNIT_HEIGHT);
+    return Math.floor(
+      (y + width - constants.MAP_TOP_MARGIN) / constants.UNIT_HEIGHT
+    );
   },
 
   getCol(x) {
@@ -24,6 +26,9 @@ export const utils = {
   },
 
   getNextRow(y) {
-    return Math.floor((y + constants.UNIT_HEIGHT - 1 - constants.MAP_TOP_MARGIN) / constants.UNIT_HEIGHT);
+    return Math.floor(
+      (y + constants.UNIT_HEIGHT - 1 - constants.MAP_TOP_MARGIN) /
+        constants.UNIT_HEIGHT
+    );
   }
 };

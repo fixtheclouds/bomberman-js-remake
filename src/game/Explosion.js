@@ -1,9 +1,8 @@
-import AnimatedSprite from '../AnimatedSprite';
+import AnimatedSprite from '../tools/AnimatedSprite';
 import SoftBlock from './SoftBlock';
 import HardBlock from './HardBlock';
 
 export default class Explosion {
-
   constructor(scene, col, row, range) {
     this.scene = scene;
     this.col = col;
@@ -23,7 +22,7 @@ export default class Explosion {
   }
 
   fire() {
-    ['up', 'right', 'down', 'left'].each((direction) => {
+    ['up', 'right', 'down', 'left'].each(direction => {
       let x = this.col;
       let y = this.row;
       for (let i = 1; i++; i <= this.range) {
@@ -53,5 +52,4 @@ export default class Explosion {
   drawBlock(col, row, type) {
     this.sprites[type].draw();
   }
-
 }

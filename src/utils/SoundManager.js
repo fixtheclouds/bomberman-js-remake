@@ -1,5 +1,4 @@
 export default class SoundManager {
-
   constructor() {
     this.handler = null;
   }
@@ -20,5 +19,4 @@ export default class SoundManager {
     this.handler.pause();
     this.handler.currentTime = 0;
   }
-
 }

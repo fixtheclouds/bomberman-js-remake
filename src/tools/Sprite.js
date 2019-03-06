@@ -1,9 +1,8 @@
-import ImageLoader from './ImageLoader';
+import ImageLoader from '../utils/ImageLoader';
 
 let imageLoader = new ImageLoader();
 
 export default class Sprite {
-
   constructor(url, x, y, width, height) {
     this.img = imageLoader.get(url);
     this.x = x;
@@ -13,7 +12,16 @@ export default class Sprite {
   }
 
   draw(ctx, posX, posY) {
-    ctx.drawImage(this.img, this.x, this.y, this.width, this.height, posX*2, posY*2, this.width*2, this.height*2);
+    ctx.drawImage(
+      this.img,
+      this.x,
+      this.y,
+      this.width,
+      this.height,
+      posX * 2,
+      posY * 2,
+      this.width * 2,
+      this.height * 2
+    );
   }
-
 }

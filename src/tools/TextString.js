@@ -1,5 +1,4 @@
 export default class TextString {
-
   constructor(text, x, y, color, shadowColor, size) {
     this.text = text.toUpperCase();
     this.x = x;
@@ -14,10 +13,9 @@ export default class TextString {
     ctx.font = `${size} PrStart`;
     if (this.shadowColor) {
       ctx.fillStyle = this.shadowColor;
-      ctx.fillText(this.text, this.x*2 + 2, this.y*2 + 2);
+      ctx.fillText(this.text, this.x * 2 + 2, this.y * 2 + 2);
     }
     ctx.fillStyle = this.color || '#ffffff';
-    ctx.fillText(this.text, this.x*2, this.y*2);
+    ctx.fillText(this.text, this.x * 2, this.y * 2);
   }
-
 }

@@ -1,5 +1,5 @@
-import Sprite from '../Sprite';
-import AnimatedSprite from '../AnimatedSprite';
+import Sprite from '../tools/Sprite';
+import AnimatedSprite from '../tools/AnimatedSprite';
 import * as constants from '../constants';
 
 export default class SoftBlock {

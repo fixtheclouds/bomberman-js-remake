@@ -1,11 +1,10 @@
-import TitleScreen from './TitleScreen';
-import ImageLoader from './ImageLoader';
-import SoundManager from './SoundManager';
+import TitleScreen from './screens/TitleScreen';
+import ImageLoader from './utils/ImageLoader';
+import SoundManager from './utils/SoundManager';
 
 let loader = new ImageLoader();
 
 export default class Game {
-
   constructor(canvas) {
     this.canvas = canvas;
     this.ctx = this.canvas.getContext('2d');
@@ -37,5 +36,4 @@ export default class Game {
   update(frame) {
     this._scene.update(frame);
   }
-
 }

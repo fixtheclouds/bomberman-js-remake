@@ -1,18 +1,19 @@
 import Scene from './Scene';
-import TextString from './TextString';
+import TextString from '../tools/TextString';
 
 const STAGE_LOADING_TIMEOUT = 30;
 
 export default class StageLoadingScreen extends Scene {
-
   constructor(game) {
     super(game);
-    this._playSound = _.once(() => this._soundManager.play('stage-start', true));
+    this._playSound = _.once(() =>
+      this._soundManager.play('stage-start', true)
+    );
     this._stage = 1;
     this._timeout = STAGE_LOADING_TIMEOUT;
   }
 
-  set stage(num){
+  set stage(num) {
     this._stage = num;
   }
 
@@ -45,5 +46,4 @@ export default class StageLoadingScreen extends Scene {
     let text = new TextString(`Stage ${num}`, 100, 170);
     text.draw(this._ctx);
   }
-
 }

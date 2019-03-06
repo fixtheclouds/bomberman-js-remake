@@ -1,24 +1,27 @@
-
-import Player from './game/Player';
+import Player from '../game/Player';
 import Scene from './Scene';
-import Timer from './game/Timer';
-import TextString from './TextString';
-import HardBlock from './game/HardBlock';
-import SoftBlock from './game/SoftBlock';
-import Bomb from './game/Bomb';
-import CollisionDetector from './CollisionDetector';
-import stages from './stages';
-import * as constants from './constants';
+import Timer from '../game/Timer';
+import TextString from '../tools/TextString';
+import HardBlock from '../game/HardBlock';
+import SoftBlock from '../game/SoftBlock';
+import Bomb from '../game/Bomb';
+import CollisionDetector from '../utils/CollisionDetector';
+import stages from '../stages';
+import * as constants from '../constants';
 
 const BGCOLOR = '#5F8B00';
 
 export default class GameScreen extends Scene {
-
   constructor(game, stage) {
     super(game);
     this.stage = stages[stage];
     this.collisionDetector = new CollisionDetector(this);
-    this.player = new Player(game, this, constants.UNIT_WIDTH, constants.MAP_TOP_MARGIN + constants.UNIT_HEIGHT);
+    this.player = new Player(
+      game,
+      this,
+      constants.UNIT_WIDTH,
+      constants.MAP_TOP_MARGIN + constants.UNIT_HEIGHT
+    );
     this.player.bindKeyboard();
     this.blocks = [];
     _.times(this.stage.size[0], () => {
@@ -56,11 +59,21 @@ export default class GameScreen extends Scene {
 
   // Build field layout
   _buildBlocks() {
-    _.times(this.stage.size[0], (i) => {
-      _.times(this.stage.size[1], (j) => {
-        if (i === 0 || i === this.stage.size[0] - 1 || j === 0 || j === this.stage.size[1] - 1 || (i % 2 === 0 && j % 2 === 0)) {
+    _.times(this.stage.size[0], i => {
+      _.times(this.stage.size[1], j => {
+        if (
+          i === 0 ||
+          i === this.stage.size[0] - 1 ||
+          j === 0 ||
+          j === this.stage.size[1] - 1 ||
+          (i % 2 === 0 && j % 2 === 0)
+        ) {
           this.blocks[i][j] = new HardBlock(i, j);
-        } else if (Math.random() < this.stage.blockDensity && i !== 1 && j !== 1) {
+        } else if (
+          Math.random() < this.stage.blockDensity &&
+          i !== 1 &&
+          j !== 1
+        ) {
           this.blocks[i][j] = new SoftBlock(i, j);
         }
       });
@@ -69,31 +82,49 @@ export default class GameScreen extends Scene {
 
   _drawHeader() {
     this._ctx.fillStyle = '#BCBCBC';
-    this._ctx.fillRect(0, 0, this._game.canvas.width, constants.MAP_TOP_MARGIN * 2);
+    this._ctx.fillRect(
+      0,
+      0,
+      this._game.canvas.width,
+      constants.MAP_TOP_MARGIN * 2
+    );
 
-    let timeText = new TextString(`time ${this.secondsLeft}`, 7, 23, '#ffffff', '#000000');
+    let timeText = new TextString(
+      `time ${this.secondsLeft}`,
+      7,
+      23,
+      '#ffffff',
+      '#000000'
+    );
     timeText.draw(this._ctx);
     let lives = this.player.lives;
-    let leftText = new TextString(`left ${lives}`, 192, 23, '#ffffff', '#000000');
+    let leftText = new TextString(
+      `left ${lives}`,
+      192,
+      23,
+      '#ffffff',
+      '#000000'
+    );
     leftText.draw(this._ctx);
   }
 
   _drawBlocks() {
-    this.blocks.forEach((row) => {
-      row.forEach((block) => {
-        if (block) { block.draw(this._ctx); }
+    this.blocks.forEach(row => {
+      row.forEach(block => {
+        if (block) {
+          block.draw(this._ctx);
+        }
       });
     });
   }
 
   updateBombs(frame) {
-    this.blocks.forEach((row) => {
-      row.forEach((block) => {
+    this.blocks.forEach(row => {
+      row.forEach(block => {
         if (block instanceof Bomb) {
           block.update(frame);
         }
       });
     });
   }
-
 }

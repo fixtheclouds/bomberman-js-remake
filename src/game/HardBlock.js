@@ -1,8 +1,7 @@
-import Sprite from '../Sprite';
+import Sprite from '../tools/Sprite';
 import * as constants from '../constants';
 
 export default class HardBlock {
-
   constructor(x, y) {
     this.x = x;
     this.y = y;
@@ -10,7 +9,10 @@ export default class HardBlock {
   }
 
   draw(ctx) {
-    this.img.draw(ctx, this.x * constants.UNIT_WIDTH, constants.MAP_TOP_MARGIN + this.y * constants.UNIT_HEIGHT);
+    this.img.draw(
+      ctx,
+      this.x * constants.UNIT_WIDTH,
+      constants.MAP_TOP_MARGIN + this.y * constants.UNIT_HEIGHT
+    );
   }
-
 }

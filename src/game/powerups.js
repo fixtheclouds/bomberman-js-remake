@@ -1,57 +1,57 @@
-import Sprite from '../Sprite';
+import Sprite from '../tools/Sprite';
 
 const powerUps = {
-  'Flames': {
+  Flames: {
     sprite: new Sprite('sprite.png', 143, 271, 16, 16),
-    action: function (player) {
+    action: player => {
       if (player.flameRange < 10) {
         player.flameRange += 1;
       }
     }
   },
-  'Bombs': {
+  Bombs: {
     sprite: new Sprite('sprite.png', 161, 241, 16, 16),
-    action: function (player) {
+    action: player => {
       if (player.maxBombs < 10) {
         player.maxBombs += 1;
       }
     }
   },
-  'Wallpass': {
+  Wallpass: {
     sprite: new Sprite('sprite.png', 215, 223, 16, 16),
-    action: function (player) {
+    action: player => {
       player.wallpass = true;
     }
   },
-  'Speed': {
+  Speed: {
     sprite: new Sprite('sprite.png', 178, 241, 16, 16),
-    action: function (player) {
+    action: player => {
       if (player.speed < 3) {
         player.speed += 1;
       }
     }
   },
-  'Detonator': {
+  Detonator: {
     sprite: new Sprite('sprite.png', 196, 241, 16, 16),
-    action: function (player) {
+    action: player => {
       player.hasDetonator = true;
     }
   },
-  'Bombpass': {
+  Bombpass: {
     sprite: new Sprite('sprite.png', 214, 241, 16, 16),
-    action: function (player) {
+    action: player => {
       player.bombpass = true;
     }
   },
-  'Flamepass': {
+  Flamepass: {
     sprite: new Sprite('sprite.png', 0, 0, 16, 16),
-    action: function (player) {
+    action: player => {
       player.flamepass = true;
     }
   },
-  'Mystery': {
+  Mystery: {
     sprite: new Sprite('sprite.png', 0, 0, 16, 16),
-    action: function (player) {
+    action: player => {
       player.makeInvincible();
     }
   }

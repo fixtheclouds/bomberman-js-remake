@@ -9,7 +9,7 @@ export default class TextString {
   }
 
   draw(ctx) {
-    let size = this.size || '16px';
+    const size = this.size || '16px';
     ctx.font = `${size} PrStart`;
     if (this.shadowColor) {
       ctx.fillStyle = this.shadowColor;

@@ -10,7 +10,7 @@ export default class CollisionDetector {
   }
 
   detect(x, y, direction, bombpass, wallpass) {
-    const blocks = this.scene.blocks;
+    const { blocks } = this.scene;
     const col = getCol(x);
     const row = getRow(y);
     const nextCol = getNextCol(x) || col;

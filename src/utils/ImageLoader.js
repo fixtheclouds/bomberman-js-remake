@@ -10,12 +10,12 @@ export default class ImageLoader {
   }
 
   load(...urls) {
-    let promise = new Promise(resolve => {
+    const promise = new Promise(resolve => {
       urls.forEach(url => {
         if (this.cache[url]) {
           return this.cache[url];
         } else {
-          let img = new Image();
+          const img = new Image();
           img.src = `./assets/images/${url}`;
           this.cache[url] = false;
           img.onload = () => {
@@ -36,7 +36,7 @@ export default class ImageLoader {
 
   isReady() {
     let ready = true;
-    for (var k in this.cache) {
+    for (const k in this.cache) {
       if (this.cache.hasOwnProperty(k) && !this.cache[k]) {
         ready = false;
       }

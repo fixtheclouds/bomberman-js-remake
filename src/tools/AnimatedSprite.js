@@ -16,9 +16,9 @@ export default class AnimatedSprite extends Sprite {
   draw(ctx, posX, posY) {
     if (this.done) return;
     if (this.animationSpeed) {
-      let max = this.frames.length;
-      let idx = Math.floor(this.frame);
-      let frameIdx = Math.floor((idx / this.animationSpeed) % max);
+      const max = this.frames.length;
+      const idx = Math.floor(this.frame);
+      const frameIdx = Math.floor((idx / this.animationSpeed) % max);
       if (!this.loop && frameIdx >= max - 1) {
         this.done = true;
         return;

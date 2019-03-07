@@ -2,7 +2,7 @@ import TitleScreen from './screens/TitleScreen';
 import ImageLoader from './utils/ImageLoader';
 import SoundManager from './utils/SoundManager';
 
-let loader = new ImageLoader();
+const loader = new ImageLoader();
 
 export default class Game {
   constructor(canvas) {

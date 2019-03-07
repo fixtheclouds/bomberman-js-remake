@@ -206,9 +206,9 @@ export default class Player {
 
   plant() {
     if (this.bombStack.length <= this.maxBombs) {
-      let col = gridMethods.getClosestCol(this.x);
-      let row = gridMethods.getClosestRow(this.y);
-      let bomb = new Bomb(this.scene, col, row, this.hasDetonator);
+      const col = gridMethods.getClosestCol(this.x);
+      const row = gridMethods.getClosestRow(this.y);
+      const bomb = new Bomb(this.scene, col, row, this.hasDetonator);
       bomb.deploy();
       this.bombStack.push(bomb);
       this.scene.blocks[col][row] = bomb;
@@ -223,18 +223,18 @@ export default class Player {
 
   smoothTurn(x, y, direction) {
     if (direction == 'right' || direction == 'left') {
-      let smoothDistanceHigh = Math.floor(constants.UNIT_WIDTH / 3);
-      let smoothDistanceLow = Math.floor((constants.UNIT_WIDTH * 2) / 3);
-      let offset = (y - constants.MAP_TOP_MARGIN) % constants.UNIT_WIDTH;
+      const smoothDistanceHigh = Math.floor(constants.UNIT_WIDTH / 3);
+      const smoothDistanceLow = Math.floor((constants.UNIT_WIDTH * 2) / 3);
+      const offset = (y - constants.MAP_TOP_MARGIN) % constants.UNIT_WIDTH;
       if (offset >= smoothDistanceLow) {
         this.y += this.currentSpeed;
       } else if (offset > 0 && offset <= smoothDistanceHigh) {
         this.y -= this.currentSpeed;
       }
     } else if (direction == 'up' || direction == 'down') {
-      let smoothDistanceHigh = Math.floor(constants.UNIT_HEIGHT / 3);
-      let smoothDistanceLow = Math.floor((constants.UNIT_HEIGHT * 2) / 3);
-      let offset = x % constants.UNIT_HEIGHT;
+      const smoothDistanceHigh = Math.floor(constants.UNIT_HEIGHT / 3);
+      const smoothDistanceLow = Math.floor((constants.UNIT_HEIGHT * 2) / 3);
+      const offset = x % constants.UNIT_HEIGHT;
       if (offset >= smoothDistanceLow) {
         this.x += this.currentSpeed;
       } else if (offset > 0 && offset <= smoothDistanceHigh) {

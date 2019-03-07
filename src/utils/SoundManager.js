@@ -5,7 +5,7 @@ export default class SoundManager {
 
   // Play audio once without initializing
   static play(sound) {
-    let audio = new Audio(`assets/sounds/${sound}.mp3`);
+    const audio = new Audio(`assets/sounds/${sound}.mp3`);
     audio.play();
   }
 

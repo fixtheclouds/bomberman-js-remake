@@ -9,7 +9,7 @@ import CollisionDetector from '../utils/CollisionDetector';
 import stages from '../stages';
 import * as constants from '../constants';
 
-const BGCOLOR = '#5F8B00';
+const BG_COLOR = '#5F8B00';
 
 export default class GameScreen extends Scene {
   constructor(game, stage) {
@@ -24,8 +24,8 @@ export default class GameScreen extends Scene {
     );
     this.player.bindKeyboard();
     this.blocks = [];
-    _.times(this.stage.size[0], () => {
-      this.blocks.push(new Array(this.stage.size[1]).fill(null));
+    _.times(this.stageWidth, () => {
+      this.blocks.push(new Array(this.stageHeight).fill(null));
     });
     this.timer = new Timer(this.stage.time);
     this.secondsLeft = null;
@@ -52,20 +52,28 @@ export default class GameScreen extends Scene {
     this.secondsLeft = this.timer.seconds;
   }
 
+  get stageWidth() {
+    return this.stage.size[0];
+  }
+
+  get stageHeight() {
+    return this.stage.size[1];
+  }
+
   _drawBG() {
-    this._ctx.fillStyle = BGCOLOR;
+    this._ctx.fillStyle = BG_COLOR;
     this._ctx.fillRect(0, 0, this._game.canvas.width, this._game.canvas.height);
   }
 
   // Build field layout
   _buildBlocks() {
-    _.times(this.stage.size[0], i => {
-      _.times(this.stage.size[1], j => {
+    _.times(this.stageWidth, i => {
+      _.times(this.stageHeight, j => {
         if (
           i === 0 ||
-          i === this.stage.size[0] - 1 ||
+          i === this.stageWidth - 1 ||
           j === 0 ||
-          j === this.stage.size[1] - 1 ||
+          j === this.stageHeight - 1 ||
           (i % 2 === 0 && j % 2 === 0)
         ) {
           this.blocks[i][j] = new HardBlock(i, j);
@@ -89,7 +97,7 @@ export default class GameScreen extends Scene {
       constants.MAP_TOP_MARGIN * 2
     );
 
-    let timeText = new TextString(
+    const timeText = new TextString(
       `time ${this.secondsLeft}`,
       7,
       23,
@@ -97,8 +105,8 @@ export default class GameScreen extends Scene {
       '#000000'
     );
     timeText.draw(this._ctx);
-    let lives = this.player.lives;
-    let leftText = new TextString(
+    const { lives } = this.player;
+    const leftText = new TextString(
       `left ${lives}`,
       192,
       23,

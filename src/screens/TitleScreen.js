@@ -20,10 +20,10 @@ export default class TitleScreen extends Scene {
   }
 
   _bindKeyboard() {
-    let keydown = e => {
+    const keydown = e => {
       if (e.keyCode === 13) {
         document.removeEventListener('keydown', keydown);
-        let scene = new GameScreen(this._game, 1);
+        const scene = new GameScreen(this._game, 1);
         scene.init();
         this._game.scene = scene;
       }
@@ -41,12 +41,12 @@ export default class TitleScreen extends Scene {
   }
 
   _drawSplash() {
-    let splash = new Sprite('sprite.png', 4, 259, 227, 139);
+    const splash = new Sprite('sprite.png', 4, 259, 227, 139);
     splash.draw(this._ctx, 14, 7);
   }
 
   _drawMenu() {
-    let text = new TextString('Start', 100, 170, '#ffffff', '#858585');
+    const text = new TextString('Start', 100, 170, '#ffffff', '#858585');
     text.draw(this._ctx);
   }
 }

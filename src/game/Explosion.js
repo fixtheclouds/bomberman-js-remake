@@ -35,7 +35,7 @@ export default class Explosion {
         } else if (direction === 'right') {
           x++;
         }
-        let edgeBlock = i == this.range;
+        const edgeBlock = i === this.range;
         if (this.scene.blocks[x][y] instanceof SoftBlock) {
           this.scene.destroySoftBlock(x, y);
           break;

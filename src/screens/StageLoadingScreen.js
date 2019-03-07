@@ -42,8 +42,8 @@ export default class StageLoadingScreen extends Scene {
   }
 
   _drawText() {
-    let num = '00'.substr((this._stage + '').length) + this._stage;
-    let text = new TextString(`Stage ${num}`, 100, 170);
+    const num = '00'.substr((this._stage + '').length) + this._stage;
+    const text = new TextString(`Stage ${num}`, 100, 170);
     text.draw(this._ctx);
   }
 }

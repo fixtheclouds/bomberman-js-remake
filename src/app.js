@@ -2,23 +2,25 @@ require('../assets/sass/main.sass');
 
 import Game from './Game';
 
-let canvas = document.getElementById('canvas');
+const FRAME_RATE = 60.0;
+
+const canvas = document.getElementById('canvas');
 canvas.width = 512;
 canvas.height = 480;
 
-let game = new Game(canvas);
+const game = new Game(canvas);
 let lastTime;
 
-let mainloop = () => {
-  let now = Date.now();
-  let frame = (now - lastTime) / 60.0;
+const mainLoop = () => {
+  const now = Date.now();
+  const frame = (now - lastTime) / FRAME_RATE;
   game.update(frame);
   game.draw();
-  requestAnimationFrame(mainloop);
+  requestAnimationFrame(mainLoop);
 };
 
 game.load().then(() => {
   lastTime = Date.now();
   game.init();
-  requestAnimationFrame(mainloop);
+  requestAnimationFrame(mainLoop);
 });

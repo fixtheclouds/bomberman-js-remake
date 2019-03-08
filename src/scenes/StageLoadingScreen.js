@@ -1,5 +1,5 @@
 import Scene from './Scene';
-import TextString from '../tools/TextString';
+import TextString from '../elements/TextString';
 
 const STAGE_LOADING_TIMEOUT = 30;
 

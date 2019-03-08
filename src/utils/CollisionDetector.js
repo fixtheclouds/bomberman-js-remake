@@ -2,14 +2,14 @@ import SoftBlock from '../game/SoftBlock';
 import HardBlock from '../game/HardBlock';
 import Bomb from '../game/Bomb';
 
-import * as constants from '../constants';
+import { UNIT_WIDTH, UNIT_HEIGHT, MAP_TOP_MARGIN } from '../constants';
 
 export default class CollisionDetector {
   constructor(scene) {
     this.scene = scene;
   }
 
-  detect(x, y, direction, bombpass, wallpass) {
+  detect(x, y, direction, bombPass, wallPass) {
     const { blocks } = this.scene;
     const col = getCol(x);
     const row = getRow(y);
@@ -20,42 +20,41 @@ export default class CollisionDetector {
       const block = blocks[x][y];
       if (block instanceof HardBlock) {
         return true;
-      } else if (!wallpass && block instanceof SoftBlock) {
+      } else if (!wallPass && block instanceof SoftBlock) {
         return true;
-      } else if (!bombpass && block instanceof Bomb) {
+      } else if (!bombPass && block instanceof Bomb) {
         return true;
       }
       return false;
     };
 
-    if (direction === 'left') {
+    switch (direction) {
+    case 'left':
       return checkBlocking(col, row) || checkBlocking(col, nextRow);
-    } else if (direction === 'right') {
+    case 'right':
       return checkBlocking(col + 1, row) || checkBlocking(col + 1, nextRow);
-    } else if (direction === 'up') {
+    case 'up':
       return checkBlocking(col, row) || checkBlocking(nextCol, row);
-    } else if (direction === 'down') {
+    case 'down':
       return checkBlocking(col, row + 1) || checkBlocking(nextCol, row + 1);
+    default:
+      return false;
     }
-    return false;
   }
 }
 
 const getCol = x => {
-  return Math.floor(x / constants.UNIT_WIDTH);
+  return Math.floor(x / UNIT_WIDTH);
 };
 
 const getRow = y => {
-  return Math.floor((y - constants.MAP_TOP_MARGIN) / constants.UNIT_HEIGHT);
+  return Math.floor((y - MAP_TOP_MARGIN) / UNIT_HEIGHT);
 };
 
 const getNextCol = x => {
-  return Math.floor((x + constants.UNIT_WIDTH - 1) / constants.UNIT_WIDTH);
+  return Math.floor((x + UNIT_WIDTH - 1) / UNIT_WIDTH);
 };
 
 const getNextRow = y => {
-  return Math.floor(
-    (y + constants.UNIT_HEIGHT - 1 - constants.MAP_TOP_MARGIN) /
-      constants.UNIT_HEIGHT
-  );
+  return Math.floor((y + UNIT_HEIGHT - 1 - MAP_TOP_MARGIN) / UNIT_HEIGHT);
 };

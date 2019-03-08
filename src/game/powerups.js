@@ -1,4 +1,4 @@
-import Sprite from '../tools/Sprite';
+import Sprite from '../elements/Sprite';
 
 const powerUps = {
   Flames: {

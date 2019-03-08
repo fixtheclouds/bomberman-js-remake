@@ -1,12 +1,12 @@
-import AnimatedSprite from '../tools/AnimatedSprite';
-import * as constants from '../constants';
+import AnimatedSprite from '../elements/AnimatedSprite';
+import { MAP_TOP_MARGIN, UNIT_HEIGHT, UNIT_WIDTH } from '../constants';
 
 export default class Bomb {
   constructor(scene, x, y, isDetonatable) {
     this.x = x;
     this.y = y;
     this.scene = scene;
-    this.timer;
+    this.timer = null;
     this.isDetonatable = isDetonatable;
     this.sprite = new AnimatedSprite(
       'sprite.png',
@@ -24,8 +24,8 @@ export default class Bomb {
   draw(ctx) {
     this.sprite.animate(
       ctx,
-      this.x * constants.UNIT_WIDTH,
-      constants.MAP_TOP_MARGIN + this.y * constants.UNIT_HEIGHT,
+      this.x * UNIT_WIDTH,
+      MAP_TOP_MARGIN + this.y * UNIT_HEIGHT,
       0.2
     );
   }

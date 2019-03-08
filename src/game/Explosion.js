@@ -1,4 +1,4 @@
-import AnimatedSprite from '../tools/AnimatedSprite';
+import AnimatedSprite from '../elements/AnimatedSprite';
 import SoftBlock from './SoftBlock';
 import HardBlock from './HardBlock';
 

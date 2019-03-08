@@ -19,7 +19,7 @@ const mainLoop = () => {
   requestAnimationFrame(mainLoop);
 };
 
-game.load().then(() => {
+game.loadResources().then(() => {
   lastTime = Date.now();
   game.init();
   requestAnimationFrame(mainLoop);

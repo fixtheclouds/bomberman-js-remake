@@ -1,6 +1,4 @@
-import ImageLoader from '../utils/ImageLoader';
-
-const imageLoader = new ImageLoader();
+import imageLoader from '../utils/imageLoader';
 
 export default class Sprite {
   constructor(url, x, y, width, height) {

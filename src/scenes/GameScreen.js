@@ -1,13 +1,13 @@
 import Player from '../game/Player';
 import Scene from './Scene';
 import Timer from '../game/Timer';
-import TextString from '../tools/TextString';
+import TextString from '../elements/TextString';
 import HardBlock from '../game/HardBlock';
 import SoftBlock from '../game/SoftBlock';
 import Bomb from '../game/Bomb';
 import CollisionDetector from '../utils/CollisionDetector';
 import stages from '../stages';
-import * as constants from '../constants';
+import { UNIT_WIDTH, UNIT_HEIGHT, MAP_TOP_MARGIN } from '../constants';
 
 const BG_COLOR = '#5F8B00';
 
@@ -19,8 +19,8 @@ export default class GameScreen extends Scene {
     this.player = new Player(
       game,
       this,
-      constants.UNIT_WIDTH,
-      constants.MAP_TOP_MARGIN + constants.UNIT_HEIGHT
+      UNIT_WIDTH,
+      MAP_TOP_MARGIN + UNIT_HEIGHT
     );
     this.player.bindKeyboard();
     this.blocks = [];
@@ -90,12 +90,7 @@ export default class GameScreen extends Scene {
 
   _drawHeader() {
     this._ctx.fillStyle = '#BCBCBC';
-    this._ctx.fillRect(
-      0,
-      0,
-      this._game.canvas.width,
-      constants.MAP_TOP_MARGIN * 2
-    );
+    this._ctx.fillRect(0, 0, this._game.canvas.width, MAP_TOP_MARGIN * 2);
 
     const timeText = new TextString(
       `time ${this.secondsLeft}`,

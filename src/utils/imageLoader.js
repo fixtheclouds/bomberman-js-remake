@@ -1,6 +1,6 @@
 let instance = null;
 
-export default class ImageLoader {
+class ImageLoader {
   constructor() {
     if (!instance) {
       instance = this;
@@ -10,7 +10,7 @@ export default class ImageLoader {
   }
 
   load(...urls) {
-    const promise = new Promise(resolve => {
+    return new Promise(resolve => {
       urls.forEach(url => {
         if (this.cache[url]) {
           return this.cache[url];
@@ -27,7 +27,6 @@ export default class ImageLoader {
         }
       });
     });
-    return promise;
   }
 
   get(url) {
@@ -44,3 +43,5 @@ export default class ImageLoader {
     return ready;
   }
 }
+
+export default new ImageLoader();

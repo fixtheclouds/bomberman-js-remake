@@ -1,34 +1,29 @@
-import * as constants from '../constants';
+import { UNIT_WIDTH, UNIT_HEIGHT, MAP_TOP_MARGIN } from '../constants';
 
 export const gridMethods = {
   getClosestCol(x) {
-    const width = constants.UNIT_WIDTH / 2;
-    return Math.floor((x + width) / constants.UNIT_WIDTH);
+    const width = UNIT_WIDTH / 2;
+    return Math.floor((x + width) / UNIT_WIDTH);
   },
 
   getClosestRow(y) {
-    const width = constants.UNIT_HEIGHT / 2;
-    return Math.floor(
-      (y + width - constants.MAP_TOP_MARGIN) / constants.UNIT_HEIGHT
-    );
+    const width = UNIT_HEIGHT / 2;
+    return Math.floor((y + width - MAP_TOP_MARGIN) / UNIT_HEIGHT);
   },
 
   getCol(x) {
-    return Math.floor(x / constants.UNIT_WIDTH);
+    return Math.floor(x / UNIT_WIDTH);
   },
 
   getRow(y) {
-    return Math.floor((y - constants.MAP_TOP_MARGIN) / constants.UNIT_HEIGHT);
+    return Math.floor((y - MAP_TOP_MARGIN) / UNIT_HEIGHT);
   },
 
   getNextCol(x) {
-    return Math.floor((x + constants.UNIT_WIDTH - 1) / constants.UNIT_WIDTH);
+    return Math.floor((x + UNIT_WIDTH - 1) / UNIT_WIDTH);
   },
 
   getNextRow(y) {
-    return Math.floor(
-      (y + constants.UNIT_HEIGHT - 1 - constants.MAP_TOP_MARGIN) /
-        constants.UNIT_HEIGHT
-    );
+    return Math.floor((y + UNIT_HEIGHT - 1 - MAP_TOP_MARGIN) / UNIT_HEIGHT);
   }
 };

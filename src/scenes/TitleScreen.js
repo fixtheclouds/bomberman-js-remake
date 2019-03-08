@@ -1,5 +1,5 @@
-import Sprite from '../tools/Sprite';
-import TextString from '../tools/TextString';
+import Sprite from '../elements/Sprite';
+import TextString from '../elements/TextString';
 import Scene from './Scene';
 import GameScreen from './GameScreen';
 

@@ -1,5 +1,4 @@
 export default class Timer {
-
   constructor(seconds) {
     this.seconds = seconds;
     this.timer = null;
@@ -19,5 +18,4 @@ export default class Timer {
   stop() {
     clearInterval(this.timer);
   }
-
 }

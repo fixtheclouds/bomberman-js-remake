@@ -1,6 +1,6 @@
-import Sprite from '../tools/Sprite';
-import AnimatedSprite from '../tools/AnimatedSprite';
-import * as constants from '../constants';
+import Sprite from '../elements/Sprite';
+import AnimatedSprite from '../elements/AnimatedSprite';
+import { UNIT_WIDTH, UNIT_HEIGHT, MAP_TOP_MARGIN } from '../constants';
 
 export default class SoftBlock {
   constructor(x, y) {
@@ -21,8 +21,8 @@ export default class SoftBlock {
   draw(ctx) {
     this.sprite.draw(
       ctx,
-      this.x * constants.UNIT_WIDTH,
-      constants.MAP_TOP_MARGIN + this.y * constants.UNIT_HEIGHT
+      this.x * UNIT_WIDTH,
+      MAP_TOP_MARGIN + this.y * UNIT_HEIGHT
     );
   }
 }

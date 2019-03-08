@@ -20,6 +20,7 @@
     "semi": ["error", "always"],
     "prefer-const": "error",
     "prefer-arrow-callback": "warn",
-    "prefer-destructuring": "warn"
+    "prefer-destructuring": "warn",
+    "max-params": ["warn", 3]
   }
 }

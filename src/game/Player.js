@@ -1,6 +1,12 @@
-import AnimatedSprite from '../tools/AnimatedSprite';
 import Bomb from './Bomb';
-import * as constants from '../constants';
+import {
+  movingUpSprite,
+  movingDownSprite,
+  movingLeftSprite,
+  movingRightSprite,
+  deathSprite
+} from './playerSprites';
+import { MAP_TOP_MARGIN, UNIT_HEIGHT, UNIT_WIDTH } from '../constants';
 import { gridMethods } from '../utils/gridMethods';
 
 const LIVES_COUNT = 3;
@@ -9,89 +15,33 @@ export default class Player {
   constructor(game, scene, x, y) {
     this.x = x;
     this.y = y;
-    this.width = 12;
-    this.height = 16;
     this.lives = LIVES_COUNT;
     this.speed = 1;
     this.currentSpeed = 0;
     this._game = game;
     this.scene = scene;
-    this.detectCollisions = scene.collisionDetector.detect;
     this._ctx = game.ctx;
     this.isAlive = true;
-    this.isMoving = false;
     this.bombStack = [];
 
     // Abilities
-    this.bombpass = false;
-    this.wallpass = false;
-    this.flamepass = false;
+    this.bombPass = false;
+    this.wallPass = false;
+    this.flamePass = false;
     this.fireRange = 1;
     this.maxBombs = 1;
     this.hasDetonator = false;
 
-    // Sprites
-    this.movingUpSprite = new AnimatedSprite(
-      'sprite.png',
-      2,
-      21,
-      12,
-      16,
-      [0, 1, 2],
-      [0, 2, 4]
-    );
-    this.movingDownSprite = new AnimatedSprite(
-      'sprite.png',
-      2,
-      3,
-      12,
-      16,
-      [0, 1, 2],
-      [0, 2, 4]
-    );
-    this.movingLeftSprite = new AnimatedSprite(
-      'sprite.png',
-      43,
-      21,
-      12,
-      16,
-      [0, 1, 2],
-      [0, 0, 2]
-    );
-    this.movingRightSprite = new AnimatedSprite(
-      'sprite.png',
-      43,
-      3,
-      12,
-      16,
-      [0, 1, 2],
-      [0, 0, 2]
-    );
-    this.deathSprite = new AnimatedSprite(
-      'sprite.png',
-      83,
-      3,
-      12,
-      16,
-      [0, 1, 2, 3, 4, 5],
-      2,
-      false
-    );
-
-    this.sprite = this.movingDownSprite;
-  }
-
-  get centerX() {
-    return this.x + this.width / 2;
-  }
-
-  get centerY() {
-    return this.y + this.height / 2;
+    this.sprite = movingDownSprite;
   }
 
   kill() {
     this.isAlive = false;
-    this.sprite = this.deathSprite;
+    this.sprite = deathSprite;
+  }
+
+  detectCollisions(...params) {
+    this.scene.collisionDetector.detect(...params);
   }
 
   bindKeyboard() {
@@ -106,22 +56,27 @@ export default class Player {
 
   keyPressCheck() {
     this.stop();
-    if (this._game.keys[39]) {
+    switch (this._game.keys) {
+    case 39:
       this.moveRight();
-    } else if (this._game.keys[37]) {
+      break;
+    case 37:
       this.moveLeft();
-    } else if (this._game.keys[38]) {
+      break;
+    case 38:
       this.moveUp();
-    } else if (this._game.keys[40]) {
+      break;
+    case 40:
       this.moveDown();
-    }
-    if (this._game.keys[17]) {
-      // ctrl
+      break;
+    case 17:
       this.plant();
-    }
-    if (this._game.keys[32]) {
-      //space
+      break;
+    case 32:
       this.detonate();
+      break;
+    default:
+      return;
     }
   }
 
@@ -131,14 +86,14 @@ export default class Player {
 
   moveDown() {
     this.currentSpeed = this.speed;
-    this.sprite = this.movingDownSprite;
+    this.sprite = movingDownSprite;
     if (
       !this.detectCollisions(
         this.x,
         this.y,
         'down',
-        this.bombpass,
-        this.wallpass
+        this.bombPass,
+        this.wallPass
       )
     ) {
       this.y += this.currentSpeed;
@@ -149,9 +104,9 @@ export default class Player {
 
   moveUp() {
     this.currentSpeed = this.speed;
-    this.sprite = this.movingUpSprite;
+    this.sprite = movingUpSprite;
     if (
-      !this.detectCollisions(this.x, this.y, 'up', this.bombpass, this.wallpass)
+      !this.detectCollisions(this.x, this.y, 'up', this.bombPass, this.wallPass)
     ) {
       this.y -= this.currentSpeed;
     } else {
@@ -161,14 +116,14 @@ export default class Player {
 
   moveRight() {
     this.currentSpeed = this.speed;
-    this.sprite = this.movingRightSprite;
+    this.sprite = movingRightSprite;
     if (
       !this.detectCollisions(
         this.x,
         this.y,
         'right',
-        this.bombpass,
-        this.wallpass
+        this.bombPass,
+        this.wallPass
       )
     ) {
       this.x += this.currentSpeed;
@@ -179,14 +134,14 @@ export default class Player {
 
   moveLeft() {
     this.currentSpeed = this.speed;
-    this.sprite = this.movingLeftSprite;
+    this.sprite = movingLeftSprite;
     if (
       !this.detectCollisions(
         this.x,
         this.y,
         'left',
-        this.bombpass,
-        this.wallpass
+        this.bombPass,
+        this.wallPass
       )
     ) {
       this.x -= this.currentSpeed;
@@ -216,25 +171,24 @@ export default class Player {
   }
 
   detonate() {
-    if (this.hasDetonator) {
-      _.first(this.bombStack).explode();
-    }
+    if (!this.hasDetonator) return;
+    _.first(this.bombStack).explode();
   }
 
   smoothTurn(x, y, direction) {
-    if (direction == 'right' || direction == 'left') {
-      const smoothDistanceHigh = Math.floor(constants.UNIT_WIDTH / 3);
-      const smoothDistanceLow = Math.floor((constants.UNIT_WIDTH * 2) / 3);
-      const offset = (y - constants.MAP_TOP_MARGIN) % constants.UNIT_WIDTH;
+    if (direction === 'right' || direction === 'left') {
+      const smoothDistanceHigh = Math.floor(UNIT_WIDTH / 3);
+      const smoothDistanceLow = Math.floor((UNIT_WIDTH * 2) / 3);
+      const offset = (y - MAP_TOP_MARGIN) % UNIT_WIDTH;
       if (offset >= smoothDistanceLow) {
         this.y += this.currentSpeed;
       } else if (offset > 0 && offset <= smoothDistanceHigh) {
         this.y -= this.currentSpeed;
       }
-    } else if (direction == 'up' || direction == 'down') {
-      const smoothDistanceHigh = Math.floor(constants.UNIT_HEIGHT / 3);
-      const smoothDistanceLow = Math.floor((constants.UNIT_HEIGHT * 2) / 3);
-      const offset = x % constants.UNIT_HEIGHT;
+    } else if (direction === 'up' || direction === 'down') {
+      const smoothDistanceHigh = Math.floor(UNIT_HEIGHT / 3);
+      const smoothDistanceLow = Math.floor((UNIT_HEIGHT * 2) / 3);
+      const offset = x % UNIT_HEIGHT;
       if (offset >= smoothDistanceLow) {
         this.x += this.currentSpeed;
       } else if (offset > 0 && offset <= smoothDistanceHigh) {

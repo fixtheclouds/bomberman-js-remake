@@ -1,8 +1,6 @@
-import TitleScreen from './screens/TitleScreen';
-import ImageLoader from './utils/ImageLoader';
+import TitleScreen from './scenes/TitleScreen';
 import SoundManager from './utils/SoundManager';
-
-const loader = new ImageLoader();
+import imageLoader from './utils/imageLoader';
 
 export default class Game {
   constructor(canvas) {
@@ -11,6 +9,10 @@ export default class Game {
     this._scene = new TitleScreen(this);
     this.keys = [];
     this.soundManager = new SoundManager();
+  }
+
+  loadResources() {
+    return imageLoader.load('sprite.png', 'bomberman_v2.png', 'bomberman.gif');
   }
 
   init() {
@@ -23,10 +25,6 @@ export default class Game {
 
   get scene() {
     return this._scene;
-  }
-
-  load() {
-    return loader.load('sprite.png', 'bomberman_v2.png', 'bomberman.gif');
   }
 
   draw() {

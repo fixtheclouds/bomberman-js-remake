@@ -19,8 +19,11 @@ const mainLoop = () => {
   requestAnimationFrame(mainLoop);
 };
 
-game.loadResources().then(() => {
+async function launch() {
+  await game.loadResources();
   lastTime = Date.now();
   game.init();
   requestAnimationFrame(mainLoop);
-});
+}
+
+launch();

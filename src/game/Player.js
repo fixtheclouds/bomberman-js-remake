@@ -8,6 +8,7 @@ import {
 } from './playerSprites';
 import { MAP_TOP_MARGIN, UNIT_HEIGHT, UNIT_WIDTH } from '../constants';
 import { gridMethods } from '../utils/gridMethods';
+import AnimatedSprite from '../elements/AnimatedSprite';
 
 const LIVES_COUNT = 3;
 
@@ -32,16 +33,24 @@ export default class Player {
     this.maxBombs = 1;
     this.hasDetonator = false;
 
-    this.sprite = movingDownSprite;
+    this.sprites = {
+      moveDown: new AnimatedSprite(...movingDownSprite),
+      moveUp: new AnimatedSprite(...movingUpSprite),
+      moveRight: new AnimatedSprite(...movingRightSprite),
+      moveLeft: new AnimatedSprite(...movingLeftSprite),
+      death: new AnimatedSprite(...deathSprite)
+    };
+
+    this.sprite = this.sprites.moveDown;
   }
 
   kill() {
     this.isAlive = false;
-    this.sprite = deathSprite;
+    this.sprite = this.sprites.death;
   }
 
   detectCollisions(...params) {
-    this.scene.collisionDetector.detect(...params);
+    return this.scene.collisionDetector.detect(...params);
   }
 
   bindKeyboard() {
@@ -56,27 +65,22 @@ export default class Player {
 
   keyPressCheck() {
     this.stop();
-    switch (this._game.keys) {
-    case 39:
+    if (this._game.keys[39]) {
       this.moveRight();
-      break;
-    case 37:
+    } else if (this._game.keys[37]) {
       this.moveLeft();
-      break;
-    case 38:
+    } else if (this._game.keys[38]) {
       this.moveUp();
-      break;
-    case 40:
+    } else if (this._game.keys[40]) {
       this.moveDown();
-      break;
-    case 17:
+    }
+    if (this._game.keys[17]) {
+      // ctrl
       this.plant();
-      break;
-    case 32:
+    }
+    if (this._game.keys[32]) {
+      //space
       this.detonate();
-      break;
-    default:
-      return;
     }
   }
 
@@ -86,7 +90,7 @@ export default class Player {
 
   moveDown() {
     this.currentSpeed = this.speed;
-    this.sprite = movingDownSprite;
+    this.sprite = this.sprites.moveDown;
     if (
       !this.detectCollisions(
         this.x,
@@ -104,7 +108,7 @@ export default class Player {
 
   moveUp() {
     this.currentSpeed = this.speed;
-    this.sprite = movingUpSprite;
+    this.sprite = this.sprites.moveUp;
     if (
       !this.detectCollisions(this.x, this.y, 'up', this.bombPass, this.wallPass)
     ) {
@@ -116,7 +120,7 @@ export default class Player {
 
   moveRight() {
     this.currentSpeed = this.speed;
-    this.sprite = movingRightSprite;
+    this.sprite = this.sprites.moveRight;
     if (
       !this.detectCollisions(
         this.x,
@@ -134,7 +138,7 @@ export default class Player {
 
   moveLeft() {
     this.currentSpeed = this.speed;
-    this.sprite = movingLeftSprite;
+    this.sprite = this.sprites.moveLeft;
     if (
       !this.detectCollisions(
         this.x,

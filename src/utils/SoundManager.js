@@ -4,9 +4,9 @@ export default class SoundManager {
   }
 
   // Play audio once without initializing
-  static play(sound) {
+  static async play(sound) {
     const audio = new Audio(`assets/sounds/${sound}.mp3`);
-    audio.play();
+    await audio.play();
   }
 
   start(sound, looped) {

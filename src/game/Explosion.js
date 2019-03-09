@@ -16,7 +16,7 @@ export default class Explosion {
       let y = this.row;
       let i = 0;
       // Draw core
-      this.scene.blocks[x][y] = new FireBlock(x, y, 'center');
+      this.dropFire(x, y, 'center');
       while (i < this.range) {
         if (direction === 'up') {
           y--;
@@ -35,7 +35,7 @@ export default class Explosion {
           return;
         } else {
           const edgeBlock = i === this.range - 1;
-          this.scene.blocks[x][y] = new FireBlock(
+          this.dropFire(
             x,
             y,
             this.constructor.computeFireType(edgeBlock, direction)
@@ -44,6 +44,11 @@ export default class Explosion {
         i++;
       }
     });
+  }
+
+  dropFire(x, y, fireType) {
+    this.scene.blocks[x][y] = new FireBlock(x, y, fireType);
+    this.scene.damage(x, y);
   }
 
   static computeFireType(isEdge, direction) {

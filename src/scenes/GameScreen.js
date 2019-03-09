@@ -28,6 +28,7 @@ export default class GameScreen extends Scene {
     });
     this.timer = new Timer(this.stage.time);
     this.secondsLeft = null;
+    this.endGameAt = 0;
   }
 
   init() {
@@ -35,6 +36,17 @@ export default class GameScreen extends Scene {
     this._game.soundManager.start('stage-theme', true);
     this._buildBlocks();
     this.timer.countdown();
+  }
+
+  restart() {
+    this.player.reset();
+    this.blocks = [];
+    _.times(this.stageWidth, () => {
+      this.blocks.push(new Array(this.stageHeight).fill(null));
+    });
+    this.timer = new Timer(this.stage.time);
+    this.endGameAt = 0;
+    this.init();
   }
 
   draw() {
@@ -49,6 +61,9 @@ export default class GameScreen extends Scene {
     this.player.keyPressCheck();
     this.updateBlocks(frame);
     this.secondsLeft = this.timer.seconds;
+    if (this.secondsLeft === this.endGameAt) {
+      this.restart();
+    }
   }
 
   get stageWidth() {
@@ -136,5 +151,20 @@ export default class GameScreen extends Scene {
         }
       });
     });
+  }
+
+  damage(col, row) {
+    if (_.isEqual(this.player.position, [col, row])) {
+      this.player.kill();
+    }
+    // TODO kill enemies here
+  }
+
+  initiateRestart() {
+    this.endGameAt = this.secondsLeft - 3;
+  }
+
+  initiateGameOver() {
+    this.endGameAt = this.secondsLeft - 3;
   }
 }

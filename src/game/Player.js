@@ -23,7 +23,7 @@ export default class Player {
     this.bombPass = false;
     this.wallPass = false;
     this.flamePass = false;
-    this.fireRange = 4;
+    this.fireRange = 1;
     this.maxBombs = 1;
     this.hasDetonator = false;
 
@@ -39,8 +39,29 @@ export default class Player {
   }
 
   kill() {
+    if (this.isAlive === false) return;
     this.isAlive = false;
     this.sprite = this.sprites.death;
+    this.lives -= 1;
+    if (this.lives === 0) {
+      this.scene.initiateGameOver();
+    } else {
+      this.scene.initiateRestart();
+    }
+  }
+
+  reset() {
+    this.isAlive = true;
+    this.sprite = this.sprites.moveDown;
+    this.x = UNIT_WIDTH;
+    this.y = MAP_TOP_MARGIN + UNIT_HEIGHT;
+  }
+
+  get position() {
+    return [
+      gridMethods.getClosestCol(this.x),
+      gridMethods.getClosestRow(this.y)
+    ];
   }
 
   detectCollisions(...params) {
@@ -59,6 +80,7 @@ export default class Player {
 
   keyPressCheck() {
     this.stop();
+    if (this.isAlive === false) return;
     if (this._game.keys[39]) {
       this.moveRight();
     } else if (this._game.keys[37]) {
@@ -149,6 +171,14 @@ export default class Player {
   }
 
   draw() {
+    if (this.sprite.animated) {
+      this.sprite.animate(this._ctx, {
+        posX: this.x,
+        posY: this.y,
+        speed: 0.2
+      });
+      return;
+    }
     this.sprite.draw(this._ctx, this.x, this.y);
   }
 

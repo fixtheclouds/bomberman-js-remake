@@ -10,7 +10,13 @@ export default class AnimatedSprite extends Sprite {
    * @param {Number} height
    * @param {Boolean} loop
    */
-  constructor({ coords, sequence, size: [width, height], loop = false }) {
+  constructor({
+    coords,
+    sequence,
+    size: [width, height],
+    auto = false,
+    loop = false
+  }) {
     super('sprite.png', null, null, width, height);
     this.frame = 0; // default frame index
     this.coords = coords;
@@ -19,6 +25,7 @@ export default class AnimatedSprite extends Sprite {
     this.done = false;
     this.animationSpeed = 0;
     this.prevFrame = 0;
+    this.animated = auto;
   }
 
   draw(ctx, posX, posY) {

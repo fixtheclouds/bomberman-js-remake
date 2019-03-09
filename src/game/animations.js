@@ -27,9 +27,10 @@ const playerAnimation = {
     loop: true
   },
   death: {
-    coords: [[83, 12], [97, 12], [111, 12], [125, 12], [139, 12]],
+    coords: [[83, 3], [97, 3], [111, 3], [125, 3], [139, 3], [159, 3]],
     sequence: [0, 1, 2, 3, 4, 5],
-    size: [12, 16]
+    size: [12, 16],
+    auto: true
   }
 };
 

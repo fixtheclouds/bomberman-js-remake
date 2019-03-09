@@ -12,7 +12,7 @@ export default class Game {
   }
 
   loadResources() {
-    return imageLoader.load('sprite.png', 'bomberman_v2.png', 'bomberman.gif');
+    return imageLoader.load('sprite.png');
   }
 
   init() {

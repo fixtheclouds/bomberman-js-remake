@@ -1,11 +1,5 @@
 import Bomb from './Bomb';
-import {
-  movingUpSprite,
-  movingDownSprite,
-  movingLeftSprite,
-  movingRightSprite,
-  deathSprite
-} from './playerSprites';
+import { playerAnimation } from './animations';
 import { MAP_TOP_MARGIN, UNIT_HEIGHT, UNIT_WIDTH } from '../constants';
 import { gridMethods } from '../utils/gridMethods';
 import AnimatedSprite from '../elements/AnimatedSprite';
@@ -29,16 +23,16 @@ export default class Player {
     this.bombPass = false;
     this.wallPass = false;
     this.flamePass = false;
-    this.fireRange = 1;
+    this.fireRange = 4;
     this.maxBombs = 1;
     this.hasDetonator = false;
 
     this.sprites = {
-      moveDown: new AnimatedSprite(...movingDownSprite),
-      moveUp: new AnimatedSprite(...movingUpSprite),
-      moveRight: new AnimatedSprite(...movingRightSprite),
-      moveLeft: new AnimatedSprite(...movingLeftSprite),
-      death: new AnimatedSprite(...deathSprite)
+      moveDown: new AnimatedSprite(playerAnimation.down),
+      moveUp: new AnimatedSprite(playerAnimation.up),
+      moveRight: new AnimatedSprite(playerAnimation.right),
+      moveLeft: new AnimatedSprite(playerAnimation.left),
+      death: new AnimatedSprite(playerAnimation.death)
     };
 
     this.sprite = this.sprites.moveDown;
@@ -164,14 +158,19 @@ export default class Player {
   }
 
   plant() {
-    if (this.bombStack.length <= this.maxBombs) {
-      const col = gridMethods.getClosestCol(this.x);
-      const row = gridMethods.getClosestRow(this.y);
-      const bomb = new Bomb(this.scene, col, row, this.hasDetonator);
-      bomb.deploy();
-      this.bombStack.push(bomb);
-      this.scene.blocks[col][row] = bomb;
-    }
+    if (this.bombStack.length >= this.maxBombs) return;
+    const col = gridMethods.getClosestCol(this.x);
+    const row = gridMethods.getClosestRow(this.y);
+    const bomb = new Bomb(
+      this.scene,
+      col,
+      row,
+      this.fireRange,
+      this.hasDetonator
+    );
+    bomb.deploy();
+    this.bombStack.push(bomb);
+    this.scene.blocks[col][row] = bomb;
   }
 
   detonate() {

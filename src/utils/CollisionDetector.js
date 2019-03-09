@@ -29,16 +29,16 @@ export default class CollisionDetector {
     };
 
     switch (direction) {
-    case 'left':
-      return checkBlocking(col, row) || checkBlocking(col, nextRow);
-    case 'right':
-      return checkBlocking(col + 1, row) || checkBlocking(col + 1, nextRow);
-    case 'up':
-      return checkBlocking(col, row) || checkBlocking(nextCol, row);
-    case 'down':
-      return checkBlocking(col, row + 1) || checkBlocking(nextCol, row + 1);
-    default:
-      return false;
+      case 'left':
+        return checkBlocking(col, row) || checkBlocking(col, nextRow);
+      case 'right':
+        return checkBlocking(col + 1, row) || checkBlocking(col + 1, nextRow);
+      case 'up':
+        return checkBlocking(col, row) || checkBlocking(nextCol, row);
+      case 'down':
+        return checkBlocking(col, row + 1) || checkBlocking(nextCol, row + 1);
+      default:
+        return false;
     }
   }
 }

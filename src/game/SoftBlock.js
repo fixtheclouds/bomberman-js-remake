@@ -1,5 +1,6 @@
 import Sprite from '../elements/Sprite';
 import AnimatedSprite from '../elements/AnimatedSprite';
+import { blockAnimation } from './animations';
 import { UNIT_WIDTH, UNIT_HEIGHT, MAP_TOP_MARGIN } from '../constants';
 
 export default class SoftBlock {
@@ -7,22 +8,41 @@ export default class SoftBlock {
     this.x = x;
     this.y = y;
     this.sprite = new Sprite('sprite.png', 17, 241, 16, 16);
-    this.destroySprite = new AnimatedSprite(
-      'sprite.png',
-      35,
-      241,
-      16,
-      16,
-      [0, 1, 2, 3, 4, 5],
-      2
-    );
+    this.animated = false;
+    this._destroyed = false;
   }
 
   draw(ctx) {
+    if (this.sprite instanceof AnimatedSprite) {
+      this.sprite.animate(ctx, {
+        posX: this.x * UNIT_WIDTH,
+        posY: MAP_TOP_MARGIN + this.y * UNIT_HEIGHT,
+        speed: 0.2
+      });
+      return;
+    }
     this.sprite.draw(
       ctx,
       this.x * UNIT_WIDTH,
       MAP_TOP_MARGIN + this.y * UNIT_HEIGHT
     );
+  }
+
+  update(frame) {
+    this.sprite.frame = frame;
+    if (this.sprite.done) this.destroy();
+  }
+
+  get destroyed() {
+    return this._destroyed;
+  }
+
+  burn() {
+    this.sprite = new AnimatedSprite(blockAnimation.burn);
+    this.animated = true;
+  }
+
+  destroy() {
+    this._destroyed = true;
   }
 }

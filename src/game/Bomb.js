@@ -1,14 +1,15 @@
-import AnimatedSprite from '../elements/AnimatedSprite';
+import OldAnimatedSprite from '../elements/OldAnimatedSprite';
+import Explosion from './Explosion';
 import { MAP_TOP_MARGIN, UNIT_HEIGHT, UNIT_WIDTH } from '../constants';
 
 export default class Bomb {
-  constructor(scene, x, y, isDetonatable) {
+  constructor(scene, x, y, range, isDetonatable) {
     this.x = x;
     this.y = y;
     this.scene = scene;
     this.timer = null;
     this.isDetonatable = isDetonatable;
-    this.sprite = new AnimatedSprite(
+    this.sprite = new OldAnimatedSprite(
       'sprite.png',
       83,
       21,
@@ -18,7 +19,12 @@ export default class Bomb {
       [0, 1, 3]
     );
     this.sprite.speed = 1;
+    this.explosion = new Explosion(scene, x, y, range);
     this.seconds = 2;
+  }
+
+  get animated() {
+    return true;
   }
 
   draw(ctx) {
@@ -31,7 +37,6 @@ export default class Bomb {
   }
 
   destroy() {
-    this.scene.blocks[this.x][this.y] = null;
     this.scene.player.bombStack = this.scene.player.bombStack.slice(1);
   }
 
@@ -46,8 +51,8 @@ export default class Bomb {
   }
 
   explode() {
-    // TODO invoke EXPLOSION
     this.destroy();
+    this.explosion.fire();
   }
 
   countdown() {

@@ -1,6 +1,6 @@
-import AnimatedSprite from '../elements/AnimatedSprite';
 import SoftBlock from './SoftBlock';
 import HardBlock from './HardBlock';
+import FireBlock from './FireBlock';
 
 export default class Explosion {
   constructor(scene, col, row, range) {
@@ -8,24 +8,16 @@ export default class Explosion {
     this.col = col;
     this.row = row;
     this.range = range;
-    this.sprites = {
-      left: new AnimatedSprite(),
-      right: new AnimatedSprite(),
-      up: new AnimatedSprite(),
-      down: new AnimatedSprite(),
-      center: new AnimatedSprite(),
-      leftEdge: new AnimatedSprite(),
-      rightEdge: new AnimatedSprite(),
-      upEdge: new AnimatedSprite(),
-      downEdge: new AnimatedSprite()
-    };
   }
 
   fire() {
-    ['up', 'right', 'down', 'left'].each(direction => {
+    ['up', 'right', 'down', 'left'].forEach(direction => {
       let x = this.col;
       let y = this.row;
-      for (let i = 1; i++; i <= this.range) {
+      let i = 0;
+      // Draw core
+      this.scene.blocks[x][y] = new FireBlock(x, y, 'center');
+      while (i < this.range) {
         if (direction === 'up') {
           y--;
         } else if (direction === 'down') {
@@ -35,21 +27,30 @@ export default class Explosion {
         } else if (direction === 'right') {
           x++;
         }
-        const edgeBlock = i === this.range;
+
         if (this.scene.blocks[x][y] instanceof SoftBlock) {
-          this.scene.destroySoftBlock(x, y);
-          break;
+          this.scene.burnSoftBlock(x, y);
+          return;
         } else if (this.scene.blocks[x][y] instanceof HardBlock) {
-          break;
+          return;
         } else {
-          this.drawBlock(x, y, edgeBlock ? direction + 'Edge' : direction);
-          // TODO publish explosion event with respective duration
+          const edgeBlock = i === this.range - 1;
+          this.scene.blocks[x][y] = new FireBlock(
+            x,
+            y,
+            this.constructor.computeFireType(edgeBlock, direction)
+          );
         }
+        i++;
       }
     });
   }
 
-  drawBlock(col, row, type) {
-    this.sprites[type].draw();
+  static computeFireType(isEdge, direction) {
+    if (isEdge) {
+      return `${direction}Edge`;
+    } else {
+      return ['left', 'right'].includes(direction) ? 'horizontal' : 'vertical';
+    }
   }
 }

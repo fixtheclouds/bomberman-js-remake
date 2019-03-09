@@ -4,7 +4,6 @@ import Timer from '../game/Timer';
 import TextString from '../elements/TextString';
 import HardBlock from '../game/HardBlock';
 import SoftBlock from '../game/SoftBlock';
-import Bomb from '../game/Bomb';
 import CollisionDetector from '../utils/CollisionDetector';
 import stages from '../stages';
 import { UNIT_WIDTH, UNIT_HEIGHT, MAP_TOP_MARGIN } from '../constants';
@@ -48,7 +47,7 @@ export default class GameScreen extends Scene {
   update(frame) {
     this.player.update(frame);
     this.player.keyPressCheck();
-    this.updateBombs(frame);
+    this.updateBlocks(frame);
     this.secondsLeft = this.timer.seconds;
   }
 
@@ -121,11 +120,19 @@ export default class GameScreen extends Scene {
     });
   }
 
-  updateBombs(frame) {
-    this.blocks.forEach(row => {
-      row.forEach(block => {
-        if (block instanceof Bomb) {
-          block.update(frame);
+  burnSoftBlock(col, row) {
+    if (this.blocks[col][row] instanceof SoftBlock) {
+      this.blocks[col][row].burn();
+    }
+  }
+
+  updateBlocks(frame) {
+    this.blocks.forEach((cols, row) => {
+      cols.forEach((block, col) => {
+        if (!block) return false;
+        if (block.animated) block.update(frame);
+        if (block.destroyed) {
+          this.blocks[row][col] = null;
         }
       });
     });

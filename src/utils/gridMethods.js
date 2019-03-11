@@ -7,8 +7,19 @@ export const gridMethods = {
   },
 
   getClosestRow(y) {
-    const width = UNIT_HEIGHT / 2;
-    return Math.floor((y + width - MAP_TOP_MARGIN) / UNIT_HEIGHT);
+    const height = UNIT_HEIGHT / 2;
+    return Math.floor((y + height - MAP_TOP_MARGIN) / UNIT_HEIGHT);
+  },
+
+  getCloseCols(x) {
+    return [Math.floor(x / UNIT_WIDTH), Math.ceil(x / UNIT_WIDTH)];
+  },
+
+  getCloseRows(y) {
+    return [
+      Math.floor((y - MAP_TOP_MARGIN) / UNIT_HEIGHT),
+      Math.ceil((y - MAP_TOP_MARGIN) / UNIT_HEIGHT)
+    ];
   },
 
   getCol(x) {

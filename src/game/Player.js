@@ -58,6 +58,10 @@ export default class Player {
   }
 
   get position() {
+    return [this.x, this.y];
+  }
+
+  get cellPosition() {
     return [
       gridMethods.getClosestCol(this.x),
       gridMethods.getClosestRow(this.y)

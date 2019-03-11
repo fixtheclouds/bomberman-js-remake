@@ -6,6 +6,7 @@ import HardBlock from '../game/HardBlock';
 import SoftBlock from '../game/SoftBlock';
 import CollisionDetector from '../utils/CollisionDetector';
 import stages from '../stages';
+import { gridMethods } from '../utils/gridMethods';
 import { UNIT_WIDTH, UNIT_HEIGHT, MAP_TOP_MARGIN } from '../constants';
 
 const BG_COLOR = '#5F8B00';
@@ -64,6 +65,12 @@ export default class GameScreen extends Scene {
     if (this.secondsLeft === this.endGameAt) {
       this.restart();
     }
+  }
+
+  overlaps([col, row], [x, y]) {
+    const cols = gridMethods.getCloseCols(x);
+    const rows = gridMethods.getCloseRows(y);
+    return !!(rows.includes(row) && cols.includes(col));
   }
 
   get stageWidth() {
@@ -154,7 +161,7 @@ export default class GameScreen extends Scene {
   }
 
   damage(col, row) {
-    if (_.isEqual(this.player.position, [col, row])) {
+    if (this.overlaps([col, row], this.player.position)) {
       this.player.kill();
     }
     // TODO kill enemies here

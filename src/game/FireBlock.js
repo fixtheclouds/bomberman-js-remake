@@ -3,7 +3,8 @@ import { fireAnimation } from './animations';
 import { MAP_TOP_MARGIN, UNIT_HEIGHT, UNIT_WIDTH } from '../constants';
 
 export default class FireBlock {
-  constructor(x, y, fireType) {
+  constructor(scene, x, y, fireType) {
+    this._scene = scene;
     this.x = x;
     this.y = y;
 
@@ -33,6 +34,7 @@ export default class FireBlock {
 
   update(frame) {
     this.sprite.frame = frame;
+    this._scene.damage(this.x, this.y);
     if (this.sprite.done) this.destroy();
   }
 }

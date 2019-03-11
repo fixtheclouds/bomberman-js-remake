@@ -47,8 +47,7 @@ export default class Explosion {
   }
 
   dropFire(x, y, fireType) {
-    this.scene.blocks[x][y] = new FireBlock(x, y, fireType);
-    this.scene.damage(x, y);
+    this.scene.blocks[x][y] = new FireBlock(this.scene, x, y, fireType);
   }
 
   static computeFireType(isEdge, direction) {

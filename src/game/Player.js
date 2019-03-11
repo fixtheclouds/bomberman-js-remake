@@ -204,7 +204,7 @@ export default class Player {
   }
 
   detonate() {
-    if (!this.hasDetonator) return;
+    if (!this.hasDetonator || _.isEmpty(this.bombStack)) return;
     _.first(this.bombStack).explode();
   }
 

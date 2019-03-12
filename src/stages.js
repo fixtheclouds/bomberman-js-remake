@@ -2,7 +2,7 @@ const stages = {
   1: {
     size: [26, 13],
     enemies: {
-      'Baloom': 4
+      Baloom: 4
     },
     time: 200,
     powerUp: 'Flames',
@@ -11,14 +11,13 @@ const stages = {
   2: {
     size: [16, 13],
     enemies: {
-      'Baloom': 4,
-      'Oneal': 1
+      Baloom: 4,
+      Oneal: 1
     },
     time: 200,
     powerUp: 'Bombs',
     blockDensity: 0.25
   }
 };
-
 
 export default stages;

@@ -8,6 +8,7 @@ import CollisionDetector from '../utils/CollisionDetector';
 import stages from '../stages';
 import { gridMethods } from '../utils/gridMethods';
 import { UNIT_WIDTH, UNIT_HEIGHT, MAP_TOP_MARGIN } from '../constants';
+import Enemy from '../game/Enemy';
 
 const BG_COLOR = '#5F8B00';
 
@@ -23,6 +24,7 @@ export default class GameScreen extends Scene {
       MAP_TOP_MARGIN + UNIT_HEIGHT
     );
     this.player.bindKeyboard();
+    this.enemies = [];
     this.blocks = [];
     _.times(this.stageWidth, () => {
       this.blocks.push(new Array(this.stageHeight).fill(null));
@@ -36,6 +38,7 @@ export default class GameScreen extends Scene {
     this._game.soundManager.stop();
     this._game.soundManager.start('stage-theme', true);
     this._buildBlocks();
+    this.spawnEnemies();
     this.timer.countdown();
   }
 
@@ -55,16 +58,24 @@ export default class GameScreen extends Scene {
     this._drawHeader();
     this._drawBlocks();
     this.player.draw();
+    _.invokeMap(this.enemies, 'draw');
   }
 
   update(frame) {
     this.player.update(frame);
+    _.invokeMap(this.enemies, 'update', frame);
     this.player.keyPressCheck();
     this.updateBlocks(frame);
     this.secondsLeft = this.timer.seconds;
     if (this.secondsLeft === this.endGameAt) {
       this.restart();
     }
+  }
+
+  spawnEnemies() {
+    _.forEach(this.stage.enemies, (count, type) => {
+      _.times(count, () => this.enemies.push(new Enemy(this._ctx, this, type)));
+    });
   }
 
   overlaps([col, row], [x, y]) {
@@ -140,6 +151,18 @@ export default class GameScreen extends Scene {
         }
       });
     });
+  }
+
+  freeCells(wallPass = false) {
+    const cells = [];
+    this.blocks.forEach((cols, row) => {
+      cols.forEach((block, col) => {
+        if (_.isNil(block) || (wallPass && block instanceof SoftBlock)) {
+          cells.push([col, row]);
+        }
+      });
+    });
+    return cells;
   }
 
   burnSoftBlock(col, row) {

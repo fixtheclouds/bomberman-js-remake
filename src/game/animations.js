@@ -34,6 +34,21 @@ const playerAnimation = {
   }
 };
 
+// ---
+// ENEMIES
+// ---
+const enemyAnimation = {
+  Baloom: {
+    left: {
+      coords: [[-1, 39], [16, 39], [33, 40]],
+      sequence: [0, 1, 2, 1],
+      size: [16, 16],
+      auto: true,
+      loop: true
+    }
+  }
+};
+
 // --
 // BOMB
 // ---
@@ -96,4 +111,10 @@ const blockAnimation = {
   }
 };
 
-export { playerAnimation, bombAnimation, fireAnimation, blockAnimation };
+export {
+  playerAnimation,
+  bombAnimation,
+  fireAnimation,
+  blockAnimation,
+  enemyAnimation
+};

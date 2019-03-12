@@ -22,6 +22,21 @@ export const gridMethods = {
     ];
   },
 
+  getNearbyCells(x, y) {
+    const col = this.getClosestCol(x);
+    const row = this.getClosestRow(y);
+
+    return [[col - 1, row], [col, row - 1], [col + 1, row], [col, row + 1]];
+  },
+
+  getX(col) {
+    return col * UNIT_WIDTH;
+  },
+
+  getY(row) {
+    return row * UNIT_HEIGHT + MAP_TOP_MARGIN;
+  },
+
   getCol(x) {
     return Math.floor(x / UNIT_WIDTH);
   },

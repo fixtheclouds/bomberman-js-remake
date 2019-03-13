@@ -1,6 +1,7 @@
 import SoftBlock from './SoftBlock';
 import HardBlock from './HardBlock';
 import FireBlock from './FireBlock';
+import SoundManager from '../utils/SoundManager';
 
 export default class Explosion {
   constructor(scene, col, row, range) {
@@ -11,6 +12,7 @@ export default class Explosion {
   }
 
   fire() {
+    SoundManager.play('explosion.wav');
     ['up', 'right', 'down', 'left'].forEach(direction => {
       let x = this.col;
       let y = this.row;

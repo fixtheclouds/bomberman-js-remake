@@ -4,8 +4,10 @@ export default class SoundManager {
   }
 
   // Play audio once without initializing
-  static async play(sound) {
-    const audio = new Audio(`assets/sounds/${sound}.mp3`);
+  static async play(fileName) {
+    const [, extension] = fileName.split('.');
+    const path = !extension ? `${fileName}.mp3` : fileName;
+    const audio = new Audio(`assets/sounds/${path}`);
     await audio.play();
   }
 

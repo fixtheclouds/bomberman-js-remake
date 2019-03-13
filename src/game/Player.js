@@ -3,8 +3,10 @@ import { playerAnimation } from './animations';
 import { MAP_TOP_MARGIN, UNIT_HEIGHT, UNIT_WIDTH } from '../constants';
 import { gridMethods } from '../utils/gridMethods';
 import AnimatedSprite from '../elements/AnimatedSprite';
+import SoundManager from '../utils/SoundManager';
 
 const LIVES_COUNT = 3;
+const ACTION_WAIT = 400;
 
 export default class Player {
   constructor(game, scene, x, y) {
@@ -13,6 +15,7 @@ export default class Player {
     this.lives = LIVES_COUNT;
     this.speed = 1;
     this.currentSpeed = 0;
+    this.direction = 'down';
     this._game = game;
     this.scene = scene;
     this._ctx = game.ctx;
@@ -26,20 +29,30 @@ export default class Player {
     this.fireRange = 1;
     this.maxBombs = 1;
     this.hasDetonator = false;
+    this.throttledPlant = _.throttle(this.plant, ACTION_WAIT, {
+      trailing: false
+    });
+    this.throttledDetonate = _.throttle(this.detonate, ACTION_WAIT, {
+      trailing: false
+    });
+    this.throttledSound = _.throttle(SoundManager.play, 250, {
+      trailing: false
+    });
 
     this.sprites = {
-      moveDown: new AnimatedSprite(playerAnimation.down),
-      moveUp: new AnimatedSprite(playerAnimation.up),
-      moveRight: new AnimatedSprite(playerAnimation.right),
-      moveLeft: new AnimatedSprite(playerAnimation.left),
+      down: new AnimatedSprite(playerAnimation.down),
+      up: new AnimatedSprite(playerAnimation.up),
+      right: new AnimatedSprite(playerAnimation.right),
+      left: new AnimatedSprite(playerAnimation.left),
       death: new AnimatedSprite(playerAnimation.death)
     };
 
-    this.sprite = this.sprites.moveDown;
+    this.sprite = this.sprites.down;
   }
 
   kill() {
     if (this.isAlive === false) return;
+    SoundManager.play('death.wav');
     this.isAlive = false;
     this.sprite = this.sprites.death;
     this.lives -= 1;
@@ -52,7 +65,7 @@ export default class Player {
 
   reset() {
     this.isAlive = true;
-    this.sprite = this.sprites.moveDown;
+    this.sprite = this.sprites.down;
     this.x = UNIT_WIDTH;
     this.y = MAP_TOP_MARGIN + UNIT_HEIGHT;
   }
@@ -86,21 +99,21 @@ export default class Player {
     this.stop();
     if (this.isAlive === false) return;
     if (this._game.keys[39]) {
-      this.moveRight();
+      this.move('right');
     } else if (this._game.keys[37]) {
-      this.moveLeft();
+      this.move('left');
     } else if (this._game.keys[38]) {
-      this.moveUp();
+      this.move('up');
     } else if (this._game.keys[40]) {
-      this.moveDown();
+      this.move('down');
     }
     if (this._game.keys[17]) {
       // ctrl
-      this.plant();
+      this.throttledPlant();
     }
     if (this._game.keys[32]) {
       //space
-      this.detonate();
+      this.throttledDetonate();
     }
   }
 
@@ -108,78 +121,36 @@ export default class Player {
     this.currentSpeed = 0;
   }
 
-  moveDown() {
+  move(direction) {
+    this.throttledSound('walk.wav');
     this.currentSpeed = this.speed;
-    this.sprite = this.sprites.moveDown;
+    this.direction = direction;
+    this.sprite = this.sprites[direction];
     if (
       !this.detectCollisions(
         this.x,
         this.y,
-        'down',
+        direction,
         this.bombPass,
         this.wallPass
       )
     ) {
-      this.y += this.currentSpeed;
+      switch (direction) {
+        case 'up':
+          this.y -= this.currentSpeed;
+          break;
+        case 'down':
+          this.y += this.currentSpeed;
+          break;
+        case 'right':
+          this.x += this.currentSpeed;
+          break;
+        case 'left':
+          this.x -= this.currentSpeed;
+          break;
+      }
     } else {
-      this.smoothTurn(this.x, this.y, 'down');
-    }
-    if (this.collidesWithEnemy()) {
-      this.kill();
-    }
-  }
-
-  moveUp() {
-    this.currentSpeed = this.speed;
-    this.sprite = this.sprites.moveUp;
-    if (
-      !this.detectCollisions(this.x, this.y, 'up', this.bombPass, this.wallPass)
-    ) {
-      this.y -= this.currentSpeed;
-    } else {
-      this.smoothTurn(this.x, this.y, 'up');
-    }
-    if (this.collidesWithEnemy()) {
-      this.kill();
-    }
-  }
-
-  moveRight() {
-    this.currentSpeed = this.speed;
-    this.sprite = this.sprites.moveRight;
-    if (
-      !this.detectCollisions(
-        this.x,
-        this.y,
-        'right',
-        this.bombPass,
-        this.wallPass
-      )
-    ) {
-      this.x += this.currentSpeed;
-    } else {
-      this.smoothTurn(this.x, this.y, 'right');
-    }
-    if (this.collidesWithEnemy()) {
-      this.kill();
-    }
-  }
-
-  moveLeft() {
-    this.currentSpeed = this.speed;
-    this.sprite = this.sprites.moveLeft;
-    if (
-      !this.detectCollisions(
-        this.x,
-        this.y,
-        'left',
-        this.bombPass,
-        this.wallPass
-      )
-    ) {
-      this.x -= this.currentSpeed;
-    } else {
-      this.smoothTurn(this.x, this.y, 'left');
+      this.smoothTurn(this.x, this.y, direction);
     }
     if (this.collidesWithEnemy()) {
       this.kill();
@@ -205,8 +176,24 @@ export default class Player {
 
   plant() {
     if (this.bombStack.length >= this.maxBombs) return;
-    const col = gridMethods.getClosestCol(this.x);
-    const row = gridMethods.getClosestRow(this.y);
+    let col = gridMethods.getClosestCol(this.x);
+    let row = gridMethods.getClosestRow(this.y);
+    if (this.currentSpeed) {
+      switch (this.direction) {
+        case 'right':
+          [col] = gridMethods.getCloseCols(this.x);
+          break;
+        case 'left':
+          [, col] = gridMethods.getCloseCols(this.x);
+          break;
+        case 'up':
+          [, row] = gridMethods.getCloseRows(this.y);
+          break;
+        case 'down':
+          [row] = gridMethods.getCloseRows(this.y);
+      }
+    }
+    if (this.scene.blocks[col][row] instanceof Bomb) return;
     const bomb = new Bomb(
       this.scene,
       col,

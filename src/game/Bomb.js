@@ -1,5 +1,6 @@
 import AnimatedSprite from '../elements/AnimatedSprite';
 import Explosion from './Explosion';
+import SoundManager from '../utils/SoundManager';
 import { bombAnimation } from './animations';
 import { MAP_TOP_MARGIN, UNIT_HEIGHT, UNIT_WIDTH } from '../constants';
 
@@ -37,6 +38,7 @@ export default class Bomb {
   }
 
   deploy() {
+    SoundManager.play('plant.wav');
     if (!this.isDetonatable) {
       this.countdown();
     }

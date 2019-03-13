@@ -10,15 +10,22 @@ export default class Enemy {
     this._scene = scene;
     _.extend(this, types[type]);
     _.extend(this, this._randomizePosition());
-    this.sprite = new AnimatedSprite(enemyAnimation[type].left);
+    this.animations = enemyAnimation[type];
+    this.sprite = new AnimatedSprite(this.animations.left);
 
     const [col, row] = this._randomizePosition();
     this.x = gridMethods.getX(col);
     this.y = gridMethods.getY(row);
   }
 
-  die() {
-    // TODO implement
+  get position() {
+    return [this.x, this.y];
+  }
+
+  kill() {
+    if (this.isAlive === false) return;
+    this.isAlive = false;
+    this.sprite = new AnimatedSprite(this.animations.death);
   }
 
   moveRandomly() {

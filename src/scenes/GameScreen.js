@@ -189,10 +189,17 @@ export default class GameScreen extends Scene {
   }
 
   damage(col, row) {
-    if (this.overlaps([col, row], this.player.position)) {
+    if (
+      this.overlaps([col, row], this.player.position) &&
+      !this.player.flamePass
+    ) {
       this.player.kill();
     }
-    // TODO kill enemies here
+    _.forEach(this.enemies, enemy => {
+      if (this.overlaps([col, row], enemy.position)) {
+        enemy.kill();
+      }
+    });
   }
 
   initiateRestart() {

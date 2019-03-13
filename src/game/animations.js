@@ -40,11 +40,24 @@ const playerAnimation = {
 const enemyAnimation = {
   Baloom: {
     left: {
-      coords: [[-1, 39], [16, 39], [33, 40]],
-      sequence: [0, 1, 2, 1],
+      coords: [[-1, 39], [16, 39], [33, 39]],
+      sequence: [0, 1, 2],
       size: [16, 16],
       auto: true,
       loop: true
+    },
+    right: {
+      coords: [[49, 39], [66, 39], [83, 39]],
+      sequence: [0, 1, 2],
+      size: [16, 16],
+      auto: true,
+      loop: true
+    },
+    death: {
+      coords: [[99, 39], [115, 39], [127, 39], [136, 39], [143, 39]],
+      sequence: [0, 1, 2, 3, 4],
+      size: [14, 16],
+      auto: true
     }
   }
 };

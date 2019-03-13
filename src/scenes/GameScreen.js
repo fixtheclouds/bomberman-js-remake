@@ -10,7 +10,8 @@ import { gridMethods } from '../utils/gridMethods';
 import { UNIT_WIDTH, UNIT_HEIGHT, MAP_TOP_MARGIN } from '../constants';
 import Enemy from '../game/Enemy';
 
-const BG_COLOR = '#5F8B00';
+const BG_COLOR = '#388400';
+const SAFE_ZONE = [[1, 1], [2, 1], [1, 2]];
 
 export default class GameScreen extends Scene {
   constructor(game, stage) {
@@ -112,7 +113,8 @@ export default class GameScreen extends Scene {
         } else if (
           Math.random() < this.stage.blockDensity &&
           i !== 1 &&
-          j !== 1
+          j !== 1 &&
+          !_.includes(SAFE_ZONE, [i, j])
         ) {
           this.blocks[i][j] = new SoftBlock(i, j);
         }
@@ -155,13 +157,16 @@ export default class GameScreen extends Scene {
 
   freeCells(wallPass = false) {
     const cells = [];
-    this.blocks.forEach((cols, row) => {
-      cols.forEach((block, col) => {
+    this.blocks.forEach((cols, col) => {
+      cols.forEach((block, row) => {
         if (_.isNil(block) || (wallPass && block instanceof SoftBlock)) {
           cells.push([col, row]);
         }
       });
     });
+    _.remove(cells, ([x, y]) =>
+      _.some(SAFE_ZONE, ([safeX, safeY]) => safeX === x && safeY === y)
+    );
     return cells;
   }
 
@@ -172,12 +177,12 @@ export default class GameScreen extends Scene {
   }
 
   updateBlocks(frame) {
-    this.blocks.forEach((cols, row) => {
-      cols.forEach((block, col) => {
+    this.blocks.forEach((cols, col) => {
+      cols.forEach((block, row) => {
         if (!block) return false;
         if (block.animated) block.update(frame);
         if (block.destroyed) {
-          this.blocks[row][col] = null;
+          this.blocks[col][row] = null;
         }
       });
     });

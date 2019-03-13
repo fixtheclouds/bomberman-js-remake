@@ -53,9 +53,10 @@ const enemyAnimation = {
 // BOMB
 // ---
 const bombAnimation = {
-  coords: [[83, 21], [100, 21], [120, 21]],
+  coords: [[83, 21], [100, 21], [119, 21]],
   size: [16, 16],
   sequence: [0, 1, 2],
+  auto: true,
   loop: true
 };
 

@@ -1,8 +1,7 @@
 import SoftBlock from '../game/SoftBlock';
 import HardBlock from '../game/HardBlock';
 import Bomb from '../game/Bomb';
-
-import { UNIT_WIDTH, UNIT_HEIGHT, MAP_TOP_MARGIN } from '../constants';
+import { gridMethods } from './gridMethods';
 
 export default class CollisionDetector {
   constructor(scene) {
@@ -11,10 +10,10 @@ export default class CollisionDetector {
 
   detect(x, y, direction, bombPass, wallPass) {
     const { blocks } = this.scene;
-    const col = getCol(x);
-    const row = getRow(y);
-    const nextCol = getNextCol(x) || col;
-    const nextRow = getNextRow(y) || row;
+    const col = gridMethods.getCol(x);
+    const row = gridMethods.getRow(y);
+    const nextCol = gridMethods.getNextCol(x) || col;
+    const nextRow = gridMethods.getNextRow(y) || row;
 
     const checkBlocking = function(x, y) {
       const block = blocks[x][y];
@@ -42,19 +41,3 @@ export default class CollisionDetector {
     }
   }
 }
-
-const getCol = x => {
-  return Math.floor(x / UNIT_WIDTH);
-};
-
-const getRow = y => {
-  return Math.floor((y - MAP_TOP_MARGIN) / UNIT_HEIGHT);
-};
-
-const getNextCol = x => {
-  return Math.floor((x + UNIT_WIDTH - 1) / UNIT_WIDTH);
-};
-
-const getNextRow = y => {
-  return Math.floor((y + UNIT_HEIGHT - 1 - MAP_TOP_MARGIN) / UNIT_HEIGHT);
-};

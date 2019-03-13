@@ -22,6 +22,12 @@ export const gridMethods = {
     ];
   },
 
+  getCloseCells(x, y) {
+    const [col1, col2] = this.getCloseCols(x);
+    const [row1, row2] = this.getCloseRows(y);
+    return [[col1, row1], [col2, row2]];
+  },
+
   getNearbyCells(x, y) {
     const col = this.getClosestCol(x);
     const row = this.getClosestRow(y);
@@ -51,5 +57,15 @@ export const gridMethods = {
 
   getNextRow(y) {
     return Math.floor((y + UNIT_HEIGHT - 1 - MAP_TOP_MARGIN) / UNIT_HEIGHT);
+  },
+
+  hasOverlap([x1, y1], [x2, y2]) {
+    const cells1 = this.getCloseCells(x1, y1);
+    const cells2 = this.getCloseCells(x2, y2);
+
+    //return _.some(cells1, ([x, y]) => x === cells2[0][0] && y === cells2[0][1]);
+    return _.some(cells1, ([x3, y3]) =>
+      _.some(cells2, ([x4, y4]) => x3 === x4 && y3 === y4)
+    );
   }
 };

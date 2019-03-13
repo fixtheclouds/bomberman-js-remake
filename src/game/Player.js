@@ -124,6 +124,9 @@ export default class Player {
     } else {
       this.smoothTurn(this.x, this.y, 'down');
     }
+    if (this.collidesWithEnemy()) {
+      this.kill();
+    }
   }
 
   moveUp() {
@@ -135,6 +138,9 @@ export default class Player {
       this.y -= this.currentSpeed;
     } else {
       this.smoothTurn(this.x, this.y, 'up');
+    }
+    if (this.collidesWithEnemy()) {
+      this.kill();
     }
   }
 
@@ -154,6 +160,9 @@ export default class Player {
     } else {
       this.smoothTurn(this.x, this.y, 'right');
     }
+    if (this.collidesWithEnemy()) {
+      this.kill();
+    }
   }
 
   moveLeft() {
@@ -171,6 +180,9 @@ export default class Player {
       this.x -= this.currentSpeed;
     } else {
       this.smoothTurn(this.x, this.y, 'left');
+    }
+    if (this.collidesWithEnemy()) {
+      this.kill();
     }
   }
 
@@ -232,5 +244,11 @@ export default class Player {
         this.x -= this.currentSpeed;
       }
     }
+  }
+
+  collidesWithEnemy() {
+    return this.scene.enemies.some(enemy =>
+      gridMethods.hasOverlap(enemy.position, this.position)
+    );
   }
 }

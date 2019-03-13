@@ -45,6 +45,7 @@ export default class GameScreen extends Scene {
 
   restart() {
     this.player.reset();
+    this.spawnEnemies();
     this.blocks = [];
     _.times(this.stageWidth, () => {
       this.blocks.push(new Array(this.stageHeight).fill(null));
@@ -74,6 +75,7 @@ export default class GameScreen extends Scene {
   }
 
   spawnEnemies() {
+    this.enemies = [];
     _.forEach(this.stage.enemies, (count, type) => {
       _.times(count, () => this.enemies.push(new Enemy(this._ctx, this, type)));
     });

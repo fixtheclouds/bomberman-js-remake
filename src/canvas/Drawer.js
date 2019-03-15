@@ -10,6 +10,14 @@ export default class Drawer {
     return instance;
   }
 
+  reset() {
+    this.offsetX = 0;
+  }
+
+  changeOffset(x) {
+    this.offsetX += x;
+  }
+
   proxyDrawImage({
     img,
     x,

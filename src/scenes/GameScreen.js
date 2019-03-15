@@ -29,7 +29,6 @@ export default class GameScreen extends Scene {
     this.timer = new Timer(this.stage.time);
     this.secondsLeft = null;
     this.endGameAt = 0;
-    this.offsetX = 0;
     this.drawer = new Drawer(this.ctx);
   }
 
@@ -42,6 +41,7 @@ export default class GameScreen extends Scene {
   }
 
   restart() {
+    this.drawer.reset();
     this.player.reset();
     this.spawnEnemies();
     this.blocks = [];
@@ -76,15 +76,10 @@ export default class GameScreen extends Scene {
     const { x } = this.player;
     const needShift = x > 512 / 4 && x < this.stageWidth - 512 / 4;
     if (needShift && this.player.direction === 'right') {
-      this.changeOffset(-1);
+      this.drawer.changeOffset(-1);
     } else if (needShift && this.player.direction === 'left') {
-      this.changeOffset(1);
+      this.drawer.changeOffset(1);
     }
-  }
-
-  changeOffset(x) {
-    this.offsetX += x;
-    this.drawer.offsetX = this.offsetX;
   }
 
   spawnEnemies() {

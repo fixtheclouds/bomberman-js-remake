@@ -47,7 +47,7 @@ export default class TitleScreen extends Scene {
       width: 227,
       height: 139
     });
-    splash.draw(this._ctx, 14, 7);
+    return splash.draw({ posX: 14, posY: 7 });
   }
 
   _drawMenu() {

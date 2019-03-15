@@ -8,10 +8,10 @@ export default class HardBlock {
     this.img = new Sprite('sprite.png', 0, 241, 16, 16);
   }
 
-  draw(ctx) {
+  draw(ctx, offsetX = 0) {
     this.img.draw(
       ctx,
-      this.x * UNIT_WIDTH,
+      this.x * UNIT_WIDTH + offsetX,
       MAP_TOP_MARGIN + this.y * UNIT_HEIGHT
     );
   }

@@ -44,16 +44,16 @@ export default class Enemy {
     // TODO implement
   }
 
-  draw() {
+  draw(_, offsetX = 0) {
     if (this.sprite.animated) {
       this.sprite.animate(this._ctx, {
-        posX: this.x,
+        posX: this.x + offsetX,
         posY: this.y,
         speed: 0.2
       });
       return;
     }
-    this.sprite.draw(this._ctx, this.x, this.y);
+    this.sprite.draw(this._ctx, this.x + offsetX, this.y);
   }
 
   update(frame) {

@@ -1,5 +1,6 @@
 import Player from '../game/Player';
 import Scene from './Scene';
+import SceneRenderer from './SceneRenderer';
 import Timer from '../game/Timer';
 import TextString from '../elements/TextString';
 import HardBlock from '../game/HardBlock';
@@ -27,12 +28,13 @@ export default class GameScreen extends Scene {
     this.player.bindKeyboard();
     this.enemies = [];
     this.blocks = [];
-    _.times(this.stageWidth, () => {
-      this.blocks.push(new Array(this.stageHeight).fill(null));
+    _.times(this.stageCols, () => {
+      this.blocks.push(new Array(this.stageRows).fill(null));
     });
     this.timer = new Timer(this.stage.time);
     this.secondsLeft = null;
     this.endGameAt = 0;
+    this.renderer = new SceneRenderer(this._ctx);
   }
 
   init() {
@@ -47,8 +49,8 @@ export default class GameScreen extends Scene {
     this.player.reset();
     this.spawnEnemies();
     this.blocks = [];
-    _.times(this.stageWidth, () => {
-      this.blocks.push(new Array(this.stageHeight).fill(null));
+    _.times(this.stageCols, () => {
+      this.blocks.push(new Array(this.stageRows).fill(null));
     });
     this.timer = new Timer(this.stage.time);
     this.endGameAt = 0;
@@ -59,8 +61,8 @@ export default class GameScreen extends Scene {
     this._drawBG();
     this._drawHeader();
     this._drawBlocks();
-    this.player.draw();
-    _.invokeMap(this.enemies, 'draw');
+    this.renderer.draw(this.player);
+    this.enemies.forEach(enemy => this.renderer.draw(enemy));
   }
 
   update(frame) {
@@ -72,6 +74,20 @@ export default class GameScreen extends Scene {
     if (this.secondsLeft === this.endGameAt) {
       this.restart();
     }
+  }
+
+  setPointOfView() {
+    const { x } = this.player;
+    const needShift = x > 512 / 4 && x < this.stageWidth - 512 / 4;
+    if (needShift && this.player.direction == 'right') {
+      this.changeOffset(-1);
+    } else if (needShift && this.player.direction == 'left') {
+      this.changeOffset(1);
+    }
+  }
+
+  changeOffset(x) {
+    this.renderer.changeBy(x);
   }
 
   spawnEnemies() {
@@ -87,12 +103,16 @@ export default class GameScreen extends Scene {
     return !!(rows.includes(row) && cols.includes(col));
   }
 
-  get stageWidth() {
+  get stageCols() {
     return this.stage.size[0];
   }
 
-  get stageHeight() {
+  get stageRows() {
     return this.stage.size[1];
+  }
+
+  get stageWidth() {
+    return this.stageCols * UNIT_WIDTH;
   }
 
   _drawBG() {
@@ -102,13 +122,13 @@ export default class GameScreen extends Scene {
 
   // Build field layout
   _buildBlocks() {
-    _.times(this.stageWidth, i => {
-      _.times(this.stageHeight, j => {
+    _.times(this.stageCols, i => {
+      _.times(this.stageRows, j => {
         if (
           i === 0 ||
-          i === this.stageWidth - 1 ||
+          i === this.stageCols - 1 ||
           j === 0 ||
-          j === this.stageHeight - 1 ||
+          j === this.stageRows - 1 ||
           (i % 2 === 0 && j % 2 === 0)
         ) {
           this.blocks[i][j] = new HardBlock(i, j);
@@ -151,7 +171,7 @@ export default class GameScreen extends Scene {
     this.blocks.forEach(row => {
       row.forEach(block => {
         if (block) {
-          block.draw(this._ctx);
+          this.renderer.draw(block);
         }
       });
     });

@@ -149,6 +149,7 @@ export default class Player {
           this.x -= this.currentSpeed;
           break;
       }
+      this.scene.setPointOfView();
     } else {
       this.smoothTurn(this.x, this.y, direction);
     }
@@ -157,16 +158,16 @@ export default class Player {
     }
   }
 
-  draw() {
+  draw(_, offsetX = 0) {
     if (this.sprite.animated) {
       this.sprite.animate(this._ctx, {
-        posX: this.x,
+        posX: this.x + offsetX,
         posY: this.y,
         speed: 0.2
       });
       return;
     }
-    this.sprite.draw(this._ctx, this.x, this.y);
+    this.sprite.draw(this._ctx, this.x + offsetX, this.y);
   }
 
   update(frame) {

@@ -1,5 +1,5 @@
-import Sprite from '../elements/Sprite';
-import TextString from '../elements/TextString';
+import Sprite from '../canvas/Sprite';
+import TextString from '../canvas/TextString';
 import Scene from './Scene';
 import GameScreen from './GameScreen';
 
@@ -41,7 +41,12 @@ export default class TitleScreen extends Scene {
   }
 
   _drawSplash() {
-    const splash = new Sprite('sprite.png', 4, 259, 227, 139);
+    const splash = new Sprite({
+      x: 4,
+      y: 259,
+      width: 227,
+      height: 139
+    });
     splash.draw(this._ctx, 14, 7);
   }
 

@@ -1,4 +1,5 @@
 import TitleScreen from './scenes/TitleScreen';
+import Drawer from './canvas/Drawer';
 import SoundManager from './utils/SoundManager';
 import imageLoader from './utils/imageLoader';
 
@@ -16,6 +17,7 @@ export default class Game {
   }
 
   init() {
+    new Drawer(this.ctx);
     this._scene.init();
   }
 

@@ -1,25 +1,24 @@
-import Bomb from './Bomb';
-import { playerAnimation } from './animations';
-import { MAP_TOP_MARGIN, UNIT_HEIGHT, UNIT_WIDTH } from '../constants';
-import { gridMethods } from '../utils/gridMethods';
-import AnimatedSprite from '../elements/AnimatedSprite';
-import SoundManager from '../utils/SoundManager';
+import Being from './Being';
+import Bomb from '../blocks/Bomb';
+import { playerAnimation } from '../animations';
+import { MAP_TOP_MARGIN, UNIT_HEIGHT, UNIT_WIDTH } from '../../constants';
+import { gridMethods } from '../../utils/gridMethods';
+import AnimatedSprite from '../../canvas/AnimatedSprite';
+import SoundManager from '../../utils/SoundManager';
 
 const LIVES_COUNT = 3;
 const ACTION_WAIT = 400;
+const DEFAULT_POSITION = [UNIT_WIDTH, MAP_TOP_MARGIN + UNIT_HEIGHT];
 
-export default class Player {
-  constructor(game, scene, x, y) {
-    this.x = x;
-    this.y = y;
+export default class Player extends Being {
+  constructor(game, scene) {
+    super(scene);
+    this._game = game;
+    [this.x, this.y] = DEFAULT_POSITION;
     this.lives = LIVES_COUNT;
     this.speed = 1;
     this.currentSpeed = 0;
     this.direction = 'down';
-    this._game = game;
-    this.scene = scene;
-    this._ctx = game.ctx;
-    this.isAlive = true;
     this.bombStack = [];
 
     // Abilities
@@ -57,17 +56,21 @@ export default class Player {
     this.sprite = this.sprites.death;
     this.lives -= 1;
     if (this.lives === 0) {
-      this.scene.initiateGameOver();
+      this._scene.initiateGameOver();
     } else {
-      this.scene.initiateRestart();
+      this._scene.initiateRestart();
     }
+  }
+
+  update(frame) {
+    super.update(frame);
+    this.sprite.animationSpeed = this.currentSpeed;
   }
 
   reset() {
     this.isAlive = true;
     this.sprite = this.sprites.down;
-    this.x = UNIT_WIDTH;
-    this.y = MAP_TOP_MARGIN + UNIT_HEIGHT;
+    [this.x, this.y] = DEFAULT_POSITION;
   }
 
   get position() {
@@ -82,7 +85,7 @@ export default class Player {
   }
 
   detectCollisions(...params) {
-    return this.scene.collisionDetector.detect(...params);
+    return this._scene.collisionDetector.detect(...params);
   }
 
   bindKeyboard() {
@@ -149,30 +152,13 @@ export default class Player {
           this.x -= this.currentSpeed;
           break;
       }
-      this.scene.setPointOfView();
+      this._scene.setPointOfView();
     } else {
       this.smoothTurn(this.x, this.y, direction);
     }
     if (this.collidesWithEnemy()) {
       this.kill();
     }
-  }
-
-  draw(_, offsetX = 0) {
-    if (this.sprite.animated) {
-      this.sprite.animate(this._ctx, {
-        posX: this.x + offsetX,
-        posY: this.y,
-        speed: 0.2
-      });
-      return;
-    }
-    this.sprite.draw(this._ctx, this.x + offsetX, this.y);
-  }
-
-  update(frame) {
-    this.sprite.animationSpeed = this.currentSpeed;
-    this.sprite.frame = frame;
   }
 
   plant() {
@@ -194,17 +180,14 @@ export default class Player {
           [row] = gridMethods.getCloseRows(this.y);
       }
     }
-    if (this.scene.blocks[col][row] instanceof Bomb) return;
-    const bomb = new Bomb(
-      this.scene,
-      col,
-      row,
-      this.fireRange,
-      this.hasDetonator
-    );
+    if (this._scene.blocks[col][row] instanceof Bomb) return;
+    const bomb = new Bomb(this._scene, col, row, {
+      range: this.fireRange,
+      isDetonatable: this.hasDetonator
+    });
     bomb.deploy();
     this.bombStack.push(bomb);
-    this.scene.blocks[col][row] = bomb;
+    this._scene.blocks[col][row] = bomb;
   }
 
   detonate() {
@@ -235,7 +218,7 @@ export default class Player {
   }
 
   collidesWithEnemy() {
-    return this.scene.enemies.some(enemy =>
+    return this._scene.enemies.some(enemy =>
       gridMethods.hasOverlap(enemy.position, this.position)
     );
   }

@@ -80,37 +80,44 @@ const fireAnimation = {
   leftEdge: {
     coords: [[2, 205], [53, 205], [107, 205], [161, 205]],
     size: [16, 16],
-    sequence: [0, 1, 2, 1, 0]
+    sequence: [0, 1, 2, 1, 0],
+    auto: true
   },
   rightEdge: {
     coords: [[35, 205], [89, 205], [143, 205], [197, 205]],
     size: [16, 16],
-    sequence: [0, 1, 2, 1, 0]
+    sequence: [0, 1, 2, 1, 0],
+    auto: true
   },
   upEdge: {
     coords: [[17, 187], [71, 187], [125, 187], [179, 187]],
     size: [16, 16],
-    sequence: [0, 1, 2, 1, 0]
+    sequence: [0, 1, 2, 1, 0],
+    auto: true
   },
   downEdge: {
     coords: [[17, 223], [71, 223], [125, 223], [179, 223]],
     size: [16, 16],
-    sequence: [0, 1, 2, 1, 0]
+    sequence: [0, 1, 2, 1, 0],
+    auto: true
   },
   center: {
     coords: [[17, 205], [71, 204], [125, 205], [179, 205]],
     size: [16, 16],
-    sequence: [0, 1, 2, 1, 0]
+    sequence: [0, 1, 2, 1, 0],
+    auto: true
   },
   vertical: {
     coords: [[35, 187], [53, 222], [107, 223], [161, 223]],
     size: [16, 16],
-    sequence: [0, 1, 2, 1, 0]
+    sequence: [0, 1, 2, 1, 0],
+    auto: true
   },
   horizontal: {
     coords: [[35, 223], [89, 223], [143, 223], [197, 223]],
     size: [16, 16],
-    sequence: [0, 1, 2, 1, 0]
+    sequence: [0, 1, 2, 1, 0],
+    auto: true
   }
 };
 
@@ -121,7 +128,8 @@ const blockAnimation = {
   burn: {
     coords: [[35, 241], [53, 241], [71, 241], [107, 241], [125, 241]],
     size: [16, 16],
-    sequence: [0, 1, 2, 3, 4]
+    sequence: [0, 1, 2, 3, 4],
+    auto: true
   }
 };
 

@@ -22,6 +22,6 @@
     "prefer-const": "error",
     "prefer-arrow-callback": "warn",
     "prefer-destructuring": "warn",
-    "max-params": ["warn", 3]
+    "max-params": ["warn", 4]
   }
 }

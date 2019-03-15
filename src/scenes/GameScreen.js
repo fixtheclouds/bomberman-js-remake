@@ -1,15 +1,15 @@
-import Player from '../game/Player';
+import Drawer from '../canvas/Drawer';
+import Player from '../game/beings/Player';
 import Scene from './Scene';
-import SceneRenderer from './SceneRenderer';
 import Timer from '../game/Timer';
-import TextString from '../elements/TextString';
-import HardBlock from '../game/HardBlock';
-import SoftBlock from '../game/SoftBlock';
+import TextString from '../canvas/TextString';
+import HardBlock from '../game/blocks/HardBlock';
+import SoftBlock from '../game/blocks/SoftBlock';
 import CollisionDetector from '../utils/CollisionDetector';
 import stages from '../stages';
 import { gridMethods } from '../utils/gridMethods';
-import { UNIT_WIDTH, UNIT_HEIGHT, MAP_TOP_MARGIN } from '../constants';
-import Enemy from '../game/Enemy';
+import { UNIT_WIDTH, MAP_TOP_MARGIN } from '../constants';
+import Enemy from '../game/beings/Enemy';
 
 const BG_COLOR = '#388400';
 const SAFE_ZONE = [[1, 1], [2, 1], [1, 2]];
@@ -19,12 +19,7 @@ export default class GameScreen extends Scene {
     super(game);
     this.stage = stages[stage];
     this.collisionDetector = new CollisionDetector(this);
-    this.player = new Player(
-      game,
-      this,
-      UNIT_WIDTH,
-      MAP_TOP_MARGIN + UNIT_HEIGHT
-    );
+    this.player = new Player(game, this);
     this.player.bindKeyboard();
     this.enemies = [];
     this.blocks = [];
@@ -34,7 +29,8 @@ export default class GameScreen extends Scene {
     this.timer = new Timer(this.stage.time);
     this.secondsLeft = null;
     this.endGameAt = 0;
-    this.renderer = new SceneRenderer(this._ctx);
+    this.offsetX = 0;
+    this.drawer = new Drawer(this.ctx);
   }
 
   init() {
@@ -61,8 +57,8 @@ export default class GameScreen extends Scene {
     this._drawBG();
     this._drawHeader();
     this._drawBlocks();
-    this.renderer.draw(this.player);
-    this.enemies.forEach(enemy => this.renderer.draw(enemy));
+    this.player.draw();
+    _.invokeMap(this.enemies, 'draw');
   }
 
   update(frame) {
@@ -79,21 +75,22 @@ export default class GameScreen extends Scene {
   setPointOfView() {
     const { x } = this.player;
     const needShift = x > 512 / 4 && x < this.stageWidth - 512 / 4;
-    if (needShift && this.player.direction == 'right') {
+    if (needShift && this.player.direction === 'right') {
       this.changeOffset(-1);
-    } else if (needShift && this.player.direction == 'left') {
+    } else if (needShift && this.player.direction === 'left') {
       this.changeOffset(1);
     }
   }
 
   changeOffset(x) {
-    this.renderer.changeBy(x);
+    this.offsetX += x;
+    this.drawer.offsetX = this.offsetX;
   }
 
   spawnEnemies() {
     this.enemies = [];
     _.forEach(this.stage.enemies, (count, type) => {
-      _.times(count, () => this.enemies.push(new Enemy(this._ctx, this, type)));
+      _.times(count, () => this.enemies.push(new Enemy(this, type)));
     });
   }
 
@@ -155,7 +152,7 @@ export default class GameScreen extends Scene {
       '#ffffff',
       '#000000'
     );
-    timeText.draw(this._ctx);
+    timeText.draw();
     const { lives } = this.player;
     const leftText = new TextString(
       `left ${lives}`,
@@ -164,14 +161,14 @@ export default class GameScreen extends Scene {
       '#ffffff',
       '#000000'
     );
-    leftText.draw(this._ctx);
+    leftText.draw();
   }
 
   _drawBlocks() {
     this.blocks.forEach(row => {
       row.forEach(block => {
         if (block) {
-          this.renderer.draw(block);
+          block.draw();
         }
       });
     });
@@ -202,7 +199,9 @@ export default class GameScreen extends Scene {
     this.blocks.forEach((cols, col) => {
       cols.forEach((block, row) => {
         if (!block) return false;
-        if (block.animated) block.update(frame);
+        if (block.animated) {
+          block.update(frame);
+        }
         if (block.destroyed) {
           this.blocks[col][row] = null;
         }

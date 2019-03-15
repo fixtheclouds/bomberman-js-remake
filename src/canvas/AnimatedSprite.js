@@ -17,8 +17,9 @@ export default class AnimatedSprite extends Sprite {
     auto = false,
     loop = false
   }) {
-    super('sprite.png', null, null, width, height);
-    this.frame = 0; // default frame index
+    super({ x: null, y: null, width, height });
+    this.frame = null;
+    this.frameIdx = 0; // default frame index
     this.coords = coords;
     this.sequence = sequence;
     this.loop = loop;
@@ -28,7 +29,7 @@ export default class AnimatedSprite extends Sprite {
     this.animated = auto;
   }
 
-  draw(ctx, posX, posY) {
+  draw({ posX, posY }) {
     if (this.done) return;
     if (this.animationSpeed) {
       const max = this.sequence.length;
@@ -38,28 +39,27 @@ export default class AnimatedSprite extends Sprite {
         this.done = true;
         return;
       }
-      this.frame = this.sequence[frame];
-      this.prevFrame = this.frame;
+      this.frameIdx = this.sequence[frame];
+      this.prevFrame = this.frameIdx;
     } else {
-      this.frame = this.prevFrame;
+      this.frameIdx = this.prevFrame;
     }
-    const [x, y] = this.coords[this.frame];
-
-    ctx.drawImage(
-      this.img,
+    const [x, y] = this.coords[this.frameIdx];
+    return this.drawer.proxyDrawImage({
+      img: this.img,
       x,
       y,
-      this.width,
-      this.height,
-      posX * 2,
-      posY * 2,
-      this.width * 2,
-      this.height * 2
-    );
+      width: this.width,
+      height: this.height,
+      imgX: posX,
+      imgY: posY,
+      imgWidth: this.width,
+      imgHeight: this.height
+    });
   }
 
-  animate(ctx, { posX, posY, speed }) {
+  animate({ posX, posY, speed }) {
     this.animationSpeed = speed ? 1 / speed : 0;
-    this.draw(ctx, posX, posY);
+    this.draw({ posX, posY });
   }
 }

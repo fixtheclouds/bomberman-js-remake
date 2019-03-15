@@ -1,13 +1,12 @@
-import types from './enemies';
-import { enemyAnimation } from './animations';
-import { gridMethods } from '../utils/gridMethods';
-import AnimatedSprite from '../elements/AnimatedSprite';
+import Being from './Being';
+import types from '../enemies';
+import { enemyAnimation } from '../animations';
+import { gridMethods } from '../../utils/gridMethods';
+import AnimatedSprite from '../../canvas/AnimatedSprite';
 
-export default class Enemy {
-  constructor(ctx, scene, type) {
-    this.isAlive = true;
-    this._ctx = ctx;
-    this._scene = scene;
+export default class Enemy extends Being {
+  constructor(scene, type) {
+    super(scene);
     _.extend(this, types[type]);
     _.extend(this, this._randomizePosition());
     this.animations = enemyAnimation[type];
@@ -16,10 +15,6 @@ export default class Enemy {
     const [col, row] = this._randomizePosition();
     this.x = gridMethods.getX(col);
     this.y = gridMethods.getY(row);
-  }
-
-  get position() {
-    return [this.x, this.y];
   }
 
   kill() {
@@ -42,22 +37,6 @@ export default class Enemy {
 
   availableDirections() {
     // TODO implement
-  }
-
-  draw(_, offsetX = 0) {
-    if (this.sprite.animated) {
-      this.sprite.animate(this._ctx, {
-        posX: this.x + offsetX,
-        posY: this.y,
-        speed: 0.2
-      });
-      return;
-    }
-    this.sprite.draw(this._ctx, this.x + offsetX, this.y);
-  }
-
-  update(frame) {
-    this.sprite.frame = frame;
   }
 
   _randomizePosition() {

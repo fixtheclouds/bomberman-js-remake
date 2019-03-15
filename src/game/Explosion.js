@@ -1,6 +1,6 @@
-import SoftBlock from './SoftBlock';
-import HardBlock from './HardBlock';
-import FireBlock from './FireBlock';
+import SoftBlock from './blocks/SoftBlock';
+import HardBlock from './blocks/HardBlock';
+import FireBlock from './blocks/FireBlock';
 import SoundManager from '../utils/SoundManager';
 
 export default class Explosion {

@@ -1,6 +1,6 @@
-import SoftBlock from '../game/SoftBlock';
-import HardBlock from '../game/HardBlock';
-import Bomb from '../game/Bomb';
+import SoftBlock from '../game/blocks/SoftBlock';
+import HardBlock from '../game/blocks/HardBlock';
+import Bomb from '../game/blocks/Bomb';
 import { gridMethods } from './gridMethods';
 
 export default class CollisionDetector {

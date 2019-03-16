@@ -27,13 +27,15 @@ export default class AnimatedSprite extends Sprite {
     this.animationSpeed = 0;
     this.prevFrame = 0;
     this.animated = auto;
+    this.setInitialFrame = _.once(frame => (this.initialFrame = frame));
   }
 
   draw({ posX, posY }) {
+    this.setInitialFrame(this.frame);
     if (this.done) return;
     if (this.animationSpeed) {
       const max = this.sequence.length;
-      const idx = Math.floor(this.frame);
+      const idx = Math.floor(this.relativeFrame);
       const frame = Math.floor((idx / this.animationSpeed) % max);
       if (!this.loop && frame >= max - 1) {
         this.done = true;
@@ -56,6 +58,10 @@ export default class AnimatedSprite extends Sprite {
       imgWidth: this.width,
       imgHeight: this.height
     });
+  }
+
+  get relativeFrame() {
+    return this.frame - this.initialFrame;
   }
 
   animate({ posX, posY, speed }) {

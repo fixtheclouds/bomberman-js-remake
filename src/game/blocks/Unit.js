@@ -21,7 +21,7 @@ export default class Unit {
     if (this.animated) {
       return this.sprite.animate({
         ...params,
-        speed: 0.2
+        speed: 0.4
       });
     }
     return this.sprite.draw(params);

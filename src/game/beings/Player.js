@@ -218,8 +218,9 @@ export default class Player extends Being {
   }
 
   collidesWithEnemy() {
-    return this._scene.enemies.some(enemy =>
-      gridMethods.hasOverlap(enemy.position, this.position)
+    return this._scene.enemies.some(
+      enemy =>
+        enemy.isAlive && gridMethods.hasOverlap(enemy.position, this.position)
     );
   }
 }

@@ -55,7 +55,7 @@ const enemyAnimation = {
     },
     death: {
       coords: [[99, 39], [115, 39], [127, 39], [136, 39], [143, 39]],
-      sequence: [0, 1, 2, 3, 4],
+      sequence: [0, 0, 0, 0, 0, 0, 1, 2, 3, 4],
       size: [14, 16],
       auto: true
     }

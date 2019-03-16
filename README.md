@@ -12,14 +12,25 @@ Navigate to cloned repo's directory and run:
 npm install
 ```
 
-To run Webpack
+To run dev server
+
+```
+npm run start
+```
+
+To build app
 
 ```
 npm run build
 ```
 
+## Controls
+
+- ⏎ - start
+- 🡄 🡆 🡅 🡇 - walk
+- Ctrl - plant bomb
+
 ## TODO
 
 - Split production/development env
-- Setup CI
 - Cover with tests

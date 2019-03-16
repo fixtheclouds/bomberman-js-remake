@@ -10,6 +10,7 @@ import stages from '../stages';
 import { gridMethods } from '../utils/gridMethods';
 import { UNIT_WIDTH, MAP_TOP_MARGIN } from '../constants';
 import Enemy from '../game/beings/Enemy';
+import StageLoadingScreen from './StageLoadingScreen';
 
 const BG_COLOR = '#388400';
 const SAFE_ZONE = [[1, 1], [2, 1], [1, 2]];
@@ -40,6 +41,12 @@ export default class GameScreen extends Scene {
     this.timer.countdown();
   }
 
+  end() {
+    const scene = new StageLoadingScreen(this._game, this);
+    scene.init();
+    this._game.scene = scene;
+  }
+
   restart() {
     this.drawer.reset();
     this.player.reset();
@@ -68,7 +75,7 @@ export default class GameScreen extends Scene {
     this.updateBlocks(frame);
     this.secondsLeft = this.timer.seconds;
     if (this.secondsLeft === this.endGameAt) {
-      this.restart();
+      this.end();
     }
   }
 

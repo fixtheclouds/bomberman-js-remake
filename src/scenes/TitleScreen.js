@@ -1,7 +1,7 @@
 import Sprite from '../canvas/Sprite';
 import TextString from '../canvas/TextString';
 import Scene from './Scene';
-import GameScreen from './GameScreen';
+import StageLoadingScreen from './StageLoadingScreen';
 
 export default class TitleScreen extends Scene {
   constructor(game) {
@@ -23,7 +23,8 @@ export default class TitleScreen extends Scene {
     const keydown = e => {
       if (e.keyCode === 13) {
         document.removeEventListener('keydown', keydown);
-        const scene = new GameScreen(this._game, 1);
+        this._game.soundManager.stop();
+        const scene = new StageLoadingScreen(this._game);
         scene.init();
         this._game.scene = scene;
       }

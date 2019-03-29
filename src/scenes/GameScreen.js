@@ -11,6 +11,7 @@ import { gridMethods } from '../utils/gridMethods';
 import { UNIT_WIDTH, MAP_TOP_MARGIN } from '../constants';
 import Enemy from '../game/beings/Enemy';
 import StageLoadingScreen from './StageLoadingScreen';
+import GameOverScreen from './GameOverScreen';
 
 const BG_COLOR = '#388400';
 const SAFE_ZONE = [[1, 1], [2, 1], [1, 2]];
@@ -47,6 +48,12 @@ export default class GameScreen extends Scene {
     this._game.scene = scene;
   }
 
+  gameOver() {
+    const scene = new GameOverScreen(this._game);
+    scene.init();
+    this._game.scene = scene;
+  }
+
   restart() {
     this.drawer.reset();
     this.player.reset();
@@ -75,7 +82,11 @@ export default class GameScreen extends Scene {
     this.updateBlocks(frame);
     this.secondsLeft = this.timer.seconds;
     if (this.secondsLeft === this.endGameAt) {
-      this.end();
+      if (this.player.lives === 0) {
+        this.gameOver();
+      } else {
+        this.end();
+      }
     }
   }
 
@@ -225,11 +236,7 @@ export default class GameScreen extends Scene {
     });
   }
 
-  initiateRestart() {
-    this.endGameAt = this.secondsLeft - 3;
-  }
-
-  initiateGameOver() {
+  initiateEndGame() {
     this.endGameAt = this.secondsLeft - 3;
   }
 }

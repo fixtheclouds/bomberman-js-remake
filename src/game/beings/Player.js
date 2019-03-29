@@ -55,11 +55,7 @@ export default class Player extends Being {
     this.isAlive = false;
     this.sprite = this.sprites.death;
     this.lives -= 1;
-    if (this.lives === 0) {
-      this._scene.initiateGameOver();
-    } else {
-      this._scene.initiateRestart();
-    }
+    this._scene.initiateEndGame();
   }
 
   update(frame) {

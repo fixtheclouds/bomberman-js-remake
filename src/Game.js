@@ -22,7 +22,9 @@ export default class Game {
   }
 
   set scene(value) {
+    this.soundManager.stop();
     this._scene = value;
+    this._scene.init();
   }
 
   get scene() {

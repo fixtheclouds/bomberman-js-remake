@@ -1,9 +1,8 @@
 import Scene from './Scene';
 import TextString from '../canvas/TextString';
-import SoundManager from '../utils/SoundManager';
 import TitleScreen from './TitleScreen';
 
-const TIMEOUT = 210;
+const TIMEOUT = 240;
 
 export default class GameOverScreen extends Scene {
   constructor(game) {
@@ -12,9 +11,7 @@ export default class GameOverScreen extends Scene {
   }
 
   restartGame() {
-    const scene = new TitleScreen(this._game);
-    scene.init();
-    this._game.scene = scene;
+    this._game.scene = new TitleScreen(this._game);
   }
 
   get active() {
@@ -22,7 +19,7 @@ export default class GameOverScreen extends Scene {
   }
 
   init() {
-    SoundManager.play('game-over');
+    this._game.soundManager.start('game-over');
   }
 
   update() {

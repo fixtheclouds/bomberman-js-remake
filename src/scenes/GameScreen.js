@@ -35,7 +35,6 @@ export default class GameScreen extends Scene {
   }
 
   init() {
-    this._game.soundManager.stop();
     this._game.soundManager.start('stage-theme', true);
     this._buildBlocks();
     this.spawnEnemies();
@@ -43,15 +42,11 @@ export default class GameScreen extends Scene {
   }
 
   end() {
-    const scene = new StageLoadingScreen(this._game, this);
-    scene.init();
-    this._game.scene = scene;
+    this._game.scene = new StageLoadingScreen(this._game, this);
   }
 
   gameOver() {
-    const scene = new GameOverScreen(this._game);
-    scene.init();
-    this._game.scene = scene;
+    this._game.scene = new GameOverScreen(this._game);
   }
 
   restart() {
@@ -81,7 +76,7 @@ export default class GameScreen extends Scene {
     this.player.keyPressCheck();
     this.updateBlocks(frame);
     this.secondsLeft = this.timer.seconds;
-    if (this.secondsLeft === this.endGameAt) {
+    if (this.secondsLeft <= this.endGameAt) {
       if (this.player.lives === 0) {
         this.gameOver();
       } else {

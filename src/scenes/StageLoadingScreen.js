@@ -1,7 +1,6 @@
 import Scene from './Scene';
 import TextString from '../canvas/TextString';
 import GameScreen from './GameScreen';
-import SoundManager from '../utils/SoundManager';
 
 const STAGE_LOADING_TIMEOUT = 210;
 
@@ -19,9 +18,7 @@ export default class StageLoadingScreen extends Scene {
       this._game.scene = this.prevScene;
       return;
     }
-    const scene = new GameScreen(this._game, this._stage);
-    scene.init();
-    this._game.scene = scene;
+    this._game.scene = new GameScreen(this._game, this._stage);
   }
 
   get active() {
@@ -29,7 +26,7 @@ export default class StageLoadingScreen extends Scene {
   }
 
   init() {
-    SoundManager.play('stage-start');
+    this._game.soundManager.start('stage-start');
   }
 
   update() {

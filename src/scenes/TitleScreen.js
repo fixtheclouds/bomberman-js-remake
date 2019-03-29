@@ -24,9 +24,7 @@ export default class TitleScreen extends Scene {
       if (e.keyCode === 13) {
         document.removeEventListener('keydown', keydown);
         this._game.soundManager.stop();
-        const scene = new StageLoadingScreen(this._game);
-        scene.init();
-        this._game.scene = scene;
+        this._game.scene = new StageLoadingScreen(this._game);
       }
     };
     document.addEventListener('keydown', keydown);

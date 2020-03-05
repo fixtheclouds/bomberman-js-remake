@@ -69,21 +69,6 @@ export default class Player extends Being {
     [this.x, this.y] = DEFAULT_POSITION;
   }
 
-  get position() {
-    return [this.x, this.y];
-  }
-
-  get cellPosition() {
-    return [
-      gridMethods.getClosestCol(this.x),
-      gridMethods.getClosestRow(this.y)
-    ];
-  }
-
-  detectCollisions(...params) {
-    return this._scene.collisionDetector.detect(...params);
-  }
-
   bindKeyboard() {
     document.addEventListener('keydown', e => {
       this._game.keys[e.keyCode] = true;
@@ -114,10 +99,6 @@ export default class Player extends Being {
       //space
       this.throttledDetonate();
     }
-  }
-
-  stop() {
-    this.currentSpeed = 0;
   }
 
   move(direction) {
@@ -191,27 +172,7 @@ export default class Player extends Being {
     _.first(this.bombStack).explode();
   }
 
-  smoothTurn(x, y, direction) {
-    if (direction === 'right' || direction === 'left') {
-      const smoothDistanceHigh = Math.floor(UNIT_WIDTH / 3);
-      const smoothDistanceLow = Math.floor((UNIT_WIDTH * 2) / 3);
-      const offset = (y - MAP_TOP_MARGIN) % UNIT_WIDTH;
-      if (offset >= smoothDistanceLow) {
-        this.y += this.currentSpeed;
-      } else if (offset > 0 && offset <= smoothDistanceHigh) {
-        this.y -= this.currentSpeed;
-      }
-    } else if (direction === 'up' || direction === 'down') {
-      const smoothDistanceHigh = Math.floor(UNIT_HEIGHT / 3);
-      const smoothDistanceLow = Math.floor((UNIT_HEIGHT * 2) / 3);
-      const offset = x % UNIT_HEIGHT;
-      if (offset >= smoothDistanceLow) {
-        this.x += this.currentSpeed;
-      } else if (offset > 0 && offset <= smoothDistanceHigh) {
-        this.x -= this.currentSpeed;
-      }
-    }
-  }
+  whenStuck() {}
 
   collidesWithEnemy() {
     return this._scene.enemies.some(

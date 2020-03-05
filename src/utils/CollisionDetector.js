@@ -9,6 +9,9 @@ export default class CollisionDetector {
   }
 
   detect(x, y, direction, bombPass, wallPass) {
+    // TODO this should not happen at all
+    if (_.isNaN(x) || _.isNaN(y)) return;
+
     const { blocks } = this.scene;
     const col = gridMethods.getCol(x);
     const row = gridMethods.getRow(y);

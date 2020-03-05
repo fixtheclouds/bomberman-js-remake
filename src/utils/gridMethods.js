@@ -63,7 +63,6 @@ export const gridMethods = {
     const cells1 = this.getCloseCells(x1, y1);
     const cells2 = this.getCloseCells(x2, y2);
 
-    //return _.some(cells1, ([x, y]) => x === cells2[0][0] && y === cells2[0][1]);
     return _.some(cells1, ([x3, y3]) =>
       _.some(cells2, ([x4, y4]) => x3 === x4 && y3 === y4)
     );

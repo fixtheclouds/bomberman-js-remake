@@ -1,0 +1,26 @@
+@font-face {
+  font-family: 'PrStart';
+  src: url(/dist/fonts/prstart.ttf); }
+
+html, body {
+  padding: 0;
+  margin: 0;
+  font-family: 'PrStart', monospace;
+  width: 100%;
+  height: 100%; }
+
+body {
+  background-color: black; }
+
+main {
+  position: relative;
+  width: 100%;
+  height: 100%; }
+
+canvas {
+  border: 1px solid darkgrey;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); }
+

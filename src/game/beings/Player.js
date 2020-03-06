@@ -38,6 +38,7 @@ export default class Player extends Being {
       trailing: false
     });
 
+    // TODO move to spriteMaps
     this.sprites = {
       down: new AnimatedSprite(playerAnimation.down),
       up: new AnimatedSprite(playerAnimation.up),

@@ -5,6 +5,8 @@ import Timer from '../game/Timer';
 import TextString from '../canvas/TextString';
 import HardBlock from '../game/blocks/HardBlock';
 import SoftBlock from '../game/blocks/SoftBlock';
+import Door from '../game/blocks/Door';
+import Powerup from '../game/blocks/Powerup';
 import CollisionDetector from '../utils/CollisionDetector';
 import stages from '../stages';
 import { gridMethods } from '../utils/gridMethods';
@@ -147,6 +149,18 @@ export default class GameScreen extends Scene {
         }
       });
     });
+    this._spawnDoor();
+    this._spawnPowerup();
+  }
+
+  _spawnPowerup() {
+    const [x, y] = _.sample(this.freeCells());
+    this.blocks[x][y] = new Powerup(x, y, this.stage.powerUp);
+  }
+
+  _spawnDoor() {
+    const [x, y] = _.sample(this.freeCells());
+    this.blocks[x][y] = new Door(x, y);
   }
 
   _drawHeader() {

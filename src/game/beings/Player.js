@@ -158,14 +158,14 @@ export default class Player extends Being {
           [row] = gridMethods.getCloseRows(this.y);
       }
     }
-    if (this._scene.blocks[col][row] instanceof Bomb) return;
+    if (this._scene.blocks[col][row].some(block => block instanceof Bomb)) return;
     const bomb = new Bomb(this._scene, col, row, {
       range: this.fireRange,
       isDetonatable: this.hasDetonator
     });
     bomb.deploy();
     this.bombStack.push(bomb);
-    this._scene.blocks[col][row] = bomb;
+    this._scene.blocks[col][row].push(bomb);
   }
 
   detonate() {

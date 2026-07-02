@@ -19,13 +19,15 @@ export default class CollisionDetector {
     const nextRow = gridMethods.getNextRow(y) || row;
 
     const checkBlocking = function(x, y) {
-      const block = blocks[x][y];
-      if (block instanceof HardBlock) {
-        return true;
-      } else if (!wallPass && block instanceof SoftBlock) {
-        return true;
-      } else if (!bombPass && block instanceof Bomb) {
-        return true;
+      const blocksInCell = blocks[x][y];
+      for (const block of blocksInCell) {
+        if (block instanceof HardBlock) {
+          return true;
+        } else if (!wallPass && block instanceof SoftBlock) {
+          return true;
+        } else if (!bombPass && block instanceof Bomb) {
+          return true;
+        }
       }
       return false;
     };

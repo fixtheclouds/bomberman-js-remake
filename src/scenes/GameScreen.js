@@ -28,7 +28,7 @@ export default class GameScreen extends Scene {
     this.enemies = [];
     this.blocks = [];
     _.times(this.stageCols, () => {
-      this.blocks.push(new Array(this.stageRows).fill(null));
+      this.blocks.push(Array.from({ length: this.stageRows }, () => []));
     });
     this.timer = new Timer(this.stage.time);
     this.secondsLeft = null;
@@ -57,7 +57,7 @@ export default class GameScreen extends Scene {
     this.spawnEnemies();
     this.blocks = [];
     _.times(this.stageCols, () => {
-      this.blocks.push(new Array(this.stageRows).fill(null));
+      this.blocks.push(Array.from({ length: this.stageRows }, () => []));
     });
     this.timer = new Timer(this.stage.time);
     this.endGameAt = 0;
@@ -138,14 +138,14 @@ export default class GameScreen extends Scene {
           j === this.stageRows - 1 ||
           (i % 2 === 0 && j % 2 === 0)
         ) {
-          this.blocks[i][j] = new HardBlock(i, j);
+          this.blocks[i][j].push(new HardBlock(i, j));
         } else if (
           Math.random() < this.stage.blockDensity &&
           i !== 1 &&
           j !== 1 &&
           !_.includes(SAFE_ZONE, [i, j])
         ) {
-          this.blocks[i][j] = new SoftBlock(i, j);
+          this.blocks[i][j].push(new SoftBlock(i, j));
         }
       });
     });
@@ -155,12 +155,12 @@ export default class GameScreen extends Scene {
 
   _spawnPowerup() {
     const [x, y] = _.sample(this.freeCells());
-    this.blocks[x][y] = new Powerup(x, y, this.stage.powerUp);
+    this.blocks[x][y].push(new Powerup(x, y, this.stage.powerUp));
   }
 
   _spawnDoor() {
     const [x, y] = _.sample(this.freeCells());
-    this.blocks[x][y] = new Door(x, y);
+    this.blocks[x][y].push(new Door(x, y));
   }
 
   _drawHeader() {
@@ -187,11 +187,13 @@ export default class GameScreen extends Scene {
   }
 
   _drawBlocks() {
-    this.blocks.forEach(row => {
-      row.forEach(block => {
-        if (block) {
-          block.draw();
-        }
+    this.blocks.forEach(cols => {
+      cols.forEach(blocksInCell => {
+        blocksInCell.forEach(block => {
+          if (block) {
+            block.draw();
+          }
+        });
       });
     });
   }
@@ -199,8 +201,11 @@ export default class GameScreen extends Scene {
   freeCells(wallPass = false) {
     const cells = [];
     this.blocks.forEach((cols, col) => {
-      cols.forEach((block, row) => {
-        if (_.isNil(block) || (wallPass && block instanceof SoftBlock)) {
+      cols.forEach((blocksInCell, row) => {
+        if (
+          blocksInCell.length === 0 ||
+          (wallPass && blocksInCell.some(block => block instanceof SoftBlock))
+        ) {
           cells.push([col, row]);
         }
       });
@@ -212,20 +217,26 @@ export default class GameScreen extends Scene {
   }
 
   burnSoftBlock(col, row) {
-    if (this.blocks[col][row] instanceof SoftBlock) {
-      this.blocks[col][row].burn();
-    }
+    const blocksInCell = this.blocks[col][row];
+    blocksInCell.forEach(block => {
+      if (block instanceof SoftBlock) {
+        block.burn();
+      }
+    });
   }
 
   updateBlocks(frame) {
     this.blocks.forEach((cols, col) => {
-      cols.forEach((block, row) => {
-        if (!block) return false;
-        if (block.animated) {
-          block.update(frame);
-        }
-        if (block.destroyed) {
-          this.blocks[col][row] = null;
+      cols.forEach((blocksInCell, row) => {
+        for (let i = blocksInCell.length - 1; i >= 0; i--) {
+          const block = blocksInCell[i];
+          if (!block) continue;
+          if (block.animated) {
+            block.update(frame);
+          }
+          if (block.destroyed) {
+            blocksInCell.splice(i, 1);
+          }
         }
       });
     });

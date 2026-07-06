@@ -226,8 +226,8 @@ export default class GameScreen extends Scene {
   }
 
   updateBlocks(frame) {
-    this.blocks.forEach((cols, col) => {
-      cols.forEach((blocksInCell, row) => {
+    this.blocks.forEach(cols => {
+      cols.forEach(blocksInCell => {
         for (let i = blocksInCell.length - 1; i >= 0; i--) {
           const block = blocksInCell[i];
           if (!block) continue;

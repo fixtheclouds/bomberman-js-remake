@@ -8,7 +8,7 @@ export default class CollisionDetector {
     this.scene = scene;
   }
 
-  detect(x, y, direction, bombPass, wallPass) {
+  detect(being, x, y, direction, bombPass, wallPass) {
     // TODO this should not happen at all
     if (_.isNaN(x) || _.isNaN(y)) return;
 
@@ -18,7 +18,7 @@ export default class CollisionDetector {
     const nextCol = gridMethods.getNextCol(x) || col;
     const nextRow = gridMethods.getNextRow(y) || row;
 
-    const checkBlocking = function(x, y) {
+    const checkBlocking = (x, y) => {
       const blocksInCell = blocks[x][y];
       for (const block of blocksInCell) {
         if (block instanceof HardBlock) {
@@ -26,6 +26,9 @@ export default class CollisionDetector {
         } else if (!wallPass && block instanceof SoftBlock) {
           return true;
         } else if (!bombPass && block instanceof Bomb) {
+          if (this.scene.overlaps([x, y], being.position)) {
+            continue; // allow passage while still overlapping
+          }
           return true;
         }
       }

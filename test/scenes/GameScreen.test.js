@@ -2,6 +2,7 @@ const assert = require('node:assert/strict');
 const GameScreen = require('../../src/scenes/GameScreen').default;
 const HardBlock = require('../../src/game/blocks/HardBlock').default;
 const SoftBlock = require('../../src/game/blocks/SoftBlock').default;
+const Bomb = require('../../src/game/blocks/Bomb').default;
 
 const makeGame = () => ({
   ctx: {},
@@ -127,6 +128,23 @@ describe('GameScreen', () => {
       screen.update(1);
       assert.equal(screen.secondsLeft, 0);
       assert.equal(game.scene.constructor.name, 'StageLoadingScreen');
+    } finally {
+      global.document = originalDocument;
+    }
+  });
+
+  it('removes an exploded bomb from the field on the next update', () => {
+    const originalDocument = global.document;
+    global.document = { addEventListener() {}, removeEventListener() {} };
+    try {
+      const screen = new GameScreen(makeGame(), 1);
+      const bomb = new Bomb(screen, 1, 1, { range: 1, isDetonatable: true });
+      screen.player.bombStack.push(bomb);
+      screen.blocks[1][1].push(bomb);
+      bomb.explosion.fire = () => {};
+      bomb.explode();
+      screen.updateBlocks(1);
+      assert.deepEqual(screen.blocks[1][1], []);
     } finally {
       global.document = originalDocument;
     }

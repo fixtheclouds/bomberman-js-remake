@@ -1,6 +1,8 @@
 const assert = require('node:assert/strict');
 const Player = require('../../src/game/beings/Player').default;
 const Bomb = require('../../src/game/blocks/Bomb').default;
+const { gridMethods } = require('../../src/utils/gridMethods');
+const CollisionDetector = require('../../src/utils/CollisionDetector').default;
 
 const makePlayer = () => {
   const scene = {
@@ -8,6 +10,12 @@ const makePlayer = () => {
       Array.from({ length: 5 }, () => [])
     ),
     collisionDetector: { detect: () => false },
+    overlaps([col, row], [x, y]) {
+      return (
+        gridMethods.getCloseCols(x).includes(col) &&
+        gridMethods.getCloseRows(y).includes(row)
+      );
+    },
     setPointOfView() {
       this.pointOfViewCalls = (this.pointOfViewCalls || 0) + 1;
     },
@@ -57,6 +65,20 @@ describe('Player', () => {
     };
     player.detonate();
     assert.equal(exploded, 1);
+  });
+
+  it('allows the planter to leave a bomb but blocks returning to it', () => {
+    const { player, scene } = makePlayer();
+    scene.collisionDetector = new CollisionDetector(scene);
+    player.hasDetonator = true;
+    player.plant();
+    const [bomb] = player.bombStack;
+    assert.equal(bomb.passableBy, player);
+    for (let i = 0; i < 16; i++) player.move('right');
+    assert.equal(player.x, 32);
+    assert.equal(bomb.passableBy, null);
+    player.move('left');
+    assert.equal(player.x, 32);
   });
 
   it('ignores detonator input until that ability is acquired', () => {

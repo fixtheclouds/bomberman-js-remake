@@ -134,6 +134,14 @@ export default class Player extends Being {
     } else {
       this.smoothTurn(this.x, this.y, direction);
     }
+    this.bombStack.forEach(bomb => {
+      if (
+        bomb.passableBy === this &&
+        !this._scene.overlaps([bomb.x, bomb.y], this.position)
+      ) {
+        bomb.passableBy = null;
+      }
+    });
     if (this.collidesWithEnemy()) {
       this.kill();
     }
@@ -164,6 +172,9 @@ export default class Player extends Being {
       range: this.fireRange,
       isDetonatable: this.hasDetonator
     });
+    if (this._scene.overlaps([col, row], this.position)) {
+      bomb.passableBy = this;
+    }
     bomb.deploy();
     this.bombStack.push(bomb);
     this._scene.blocks[col][row].push(bomb);

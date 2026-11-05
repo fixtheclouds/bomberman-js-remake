@@ -14,10 +14,15 @@ export default class Bomb extends Unit {
     this.sprite.animationSpeed = 1;
     this.explosion = new Explosion(scene, x, y, range);
     this.seconds = 2;
+    this.passableBy = null;
   }
 
   destroy() {
-    this.scene.player.bombStack = this.scene.player.bombStack.slice(1);
+    super.destroy();
+    clearInterval(this.timer);
+    this.scene.player.bombStack = this.scene.player.bombStack.filter(
+      bomb => bomb !== this
+    );
   }
 
   deploy() {
@@ -28,6 +33,7 @@ export default class Bomb extends Unit {
   }
 
   explode() {
+    if (this.destroyed) return;
     this.destroy();
     this.explosion.fire();
   }

@@ -25,5 +25,13 @@ module.exports = [
       'prefer-destructuring': 'warn',
       'max-params': ['warn', 4]
     }
+  },
+  {
+    files: ['test/**/*.js'],
+    languageOptions: {
+      sourceType: 'commonjs',
+      globals: { ...globals.node, ...globals.mocha, _: 'readonly' }
+    },
+    rules: { 'max-len': ['warn', { code: 100 }] }
   }
 ];

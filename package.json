@@ -6,8 +6,10 @@
   "scripts": {
     "build": "webpack",
     "start": "webpack serve",
+    "test": "mocha \"test/**/*.test.js\" --require esbuild-register --require test/setup.js --reporter spec",
+    "coverage": "c8 --include 'src/**/*.js' --check-coverage --lines 80 --branches 65 --functions 70 npm test",
     "lint": "eslint src",
-    "test": "./node_modules/.bin/mocha --reporter spec"
+    "lint:test": "eslint test"
   },
   "keywords": [
     "nes",
@@ -26,7 +28,9 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "c8": "^9.1.0",
     "css-loader": "^7.1.2",
+    "esbuild-register": "^3.6.0",
     "eslint": "^10.14.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",

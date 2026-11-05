@@ -14,25 +14,19 @@ module.exports = {
   },
   mode: 'development',
   plugins: [
-    new MiniCssExtractPlugin('styles.css'),
-    new webpack.ProvidePlugin({
-      _: 'lodash'
-    })
+    new MiniCssExtractPlugin({ filename: 'styles.css' }),
+    new webpack.ProvidePlugin({ _: 'lodash' })
   ],
   module: {
     rules: [
-      {
-        test: /\.s$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader'
-      },
       {
         test: /\.sass$/,
         use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader']
       },
       {
         test: /\.ttf$/,
-        loader: 'file-loader?name=fonts/[name].[ext]'
+        type: 'asset/resource',
+        generator: { filename: 'fonts/[name][ext]' }
       }
     ]
   },

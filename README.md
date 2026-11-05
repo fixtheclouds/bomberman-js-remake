@@ -24,6 +24,26 @@ To build app
 npm run build
 ```
 
+## Tests
+
+Run the unit and browser-entry smoke tests with Mocha:
+
+```
+npm test
+```
+
+Check source coverage (minimum 80% lines, 65% branches, and 70% functions):
+
+```
+npm run coverage
+```
+
+Lint test files with:
+
+```
+npm run lint:test
+```
+
 ## Controls
 
 - ⏎ - start
@@ -33,4 +53,3 @@ npm run build
 ## TODO
 
 - Split production/development env
-- Cover with tests

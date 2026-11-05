@@ -30,10 +30,11 @@ export default class Explosion {
           x++;
         }
 
-        if (this.scene.blocks[x][y] instanceof SoftBlock) {
+        const blocksInCell = this.scene.blocks[x][y];
+        if (blocksInCell.some(block => block instanceof SoftBlock)) {
           this.scene.burnSoftBlock(x, y);
           return;
-        } else if (this.scene.blocks[x][y] instanceof HardBlock) {
+        } else if (blocksInCell.some(block => block instanceof HardBlock)) {
           return;
         } else {
           const edgeBlock = i === this.range - 1;
@@ -49,7 +50,7 @@ export default class Explosion {
   }
 
   dropFire(x, y, fireType) {
-    this.scene.blocks[x][y] = new FireBlock(this.scene, x, y, fireType);
+    this.scene.blocks[x][y].push(new FireBlock(this.scene, x, y, fireType));
   }
 
   static computeFireType(isEdge, direction) {

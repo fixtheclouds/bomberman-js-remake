@@ -41,7 +41,7 @@ export default class Being {
 
   /** COMMON MOVEMENT MECHANICS **/
   detectCollisions(...params) {
-    return this._scene.collisionDetector.detect(...params);
+    return this._scene.collisionDetector.detect(this, ...params);
   }
 
   stop() {

@@ -18,7 +18,7 @@ const powerUps = {
   Wallpass: {
     sprite: { x: 215, y: 223, width: 16, height: 16 },
     action: player => {
-      player.wallpass = true;
+      player.wallPass = true;
     }
   },
   Speed: {
@@ -38,13 +38,13 @@ const powerUps = {
   Bombpass: {
     sprite: { x: 214, y: 241, width: 16, height: 16 },
     action: player => {
-      player.bombpass = true;
+      player.bombPass = true;
     }
   },
   Flamepass: {
     sprite: { x: 0, y: 0, width: 16, height: 16 },
     action: player => {
-      player.flamepass = true;
+      player.flamePass = true;
     }
   },
   Mystery: {

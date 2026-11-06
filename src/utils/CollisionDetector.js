@@ -26,8 +26,9 @@ export default class CollisionDetector {
         } else if (!wallPass && block instanceof SoftBlock) {
           return true;
         } else if (!bombPass && block instanceof Bomb) {
-          if (this.scene.overlaps([x, y], being.position)) {
-            continue; // allow passage while still overlapping
+          if (block.passableBy === being) {
+            if (this.scene.overlaps([x, y], being.position)) continue;
+            block.passableBy = null;
           }
           return true;
         }
@@ -37,11 +38,17 @@ export default class CollisionDetector {
 
     switch (direction) {
       case 'left':
-        return checkBlocking(col, row) || checkBlocking(col, nextRow);
+        return (
+          checkBlocking(gridMethods.getCol(x - 1), row) ||
+          checkBlocking(gridMethods.getCol(x - 1), nextRow)
+        );
       case 'right':
         return checkBlocking(col + 1, row) || checkBlocking(col + 1, nextRow);
       case 'up':
-        return checkBlocking(col, row) || checkBlocking(nextCol, row);
+        return (
+          checkBlocking(col, gridMethods.getRow(y - 1)) ||
+          checkBlocking(nextCol, gridMethods.getRow(y - 1))
+        );
       case 'down':
         return checkBlocking(col, row + 1) || checkBlocking(nextCol, row + 1);
       default:

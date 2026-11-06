@@ -13,7 +13,22 @@ describe('Bomb', () => {
     assert.equal(bomb.timer, null);
     bomb.explode();
     assert.deepEqual(scene.player.bombStack, []);
+    assert.equal(bomb.destroyed, true);
     assert.equal(scene.exploded, true);
+  });
+
+  it('removes only the exploded bomb and fires only once', () => {
+    const scene = { player: { bombStack: [] } };
+    const first = new Bomb(scene, 1, 1, { range: 1, isDetonatable: true });
+    const second = new Bomb(scene, 2, 1, { range: 1, isDetonatable: true });
+    scene.player.bombStack.push(first, second);
+    let explosions = 0;
+    second.explosion.fire = () => explosions++;
+    second.explode();
+    second.explode();
+    assert.deepEqual(scene.player.bombStack, [first]);
+    assert.equal(second.destroyed, true);
+    assert.equal(explosions, 1);
   });
 
   it('counts down and explodes after its fuse reaches zero', () => {

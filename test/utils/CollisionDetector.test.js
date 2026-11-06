@@ -29,31 +29,32 @@ describe('CollisionDetector', () => {
     scene.blocks[1][1].push(new SoftBlock(1, 1));
     const detector = new CollisionDetector(scene);
     assert.equal(
-      detector.detect({ position: [16, 48] }, 16, 48, 'left', false, false),
+      detector.detect({ position: [17, 48] }, 17, 48, 'left', false, false),
       true
     );
     assert.equal(
-      detector.detect({ position: [16, 48] }, 16, 48, 'left', false, true),
+      detector.detect({ position: [17, 48] }, 17, 48, 'left', false, true),
       false
     );
   });
 
   it('allows exiting an overlapping bomb, then blocks re-entry', () => {
     const scene = makeScene();
-    scene.blocks[1][1].push(
-      new Bomb(scene, 1, 1, { range: 1, isDetonatable: true })
-    );
+    const being = { position: [17, 48] };
+    const bomb = new Bomb(scene, 1, 1, { range: 1, isDetonatable: true });
+    bomb.passableBy = being;
+    scene.blocks[1][1].push(bomb);
     scene.overlaps = ([col, row]) => col === 1 && row === 1;
     const detector = new CollisionDetector(scene);
+    assert.equal(detector.detect(being, 17, 48, 'left', false, false), false);
     assert.equal(
-      detector.detect({ position: [16, 48] }, 16, 48, 'left', false, false),
-      false
-    );
-    scene.overlaps = () => false;
-    assert.equal(
-      detector.detect({ position: [16, 48] }, 16, 48, 'left', false, false),
+      detector.detect({ position: [17, 48] }, 17, 48, 'left', false, false),
       true
     );
+    scene.overlaps = () => false;
+    assert.equal(detector.detect(being, 17, 48, 'left', false, false), true);
+    scene.overlaps = () => true;
+    assert.equal(detector.detect(being, 17, 48, 'left', false, false), true);
   });
 
   it('ignores invalid coordinates and unknown directions', () => {
